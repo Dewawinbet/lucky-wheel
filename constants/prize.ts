@@ -1,0 +1,58 @@
+import type { Prize } from '@/types/prize'
+
+export const PRIZES: Prize[] = [
+  {
+    id: 'angpow',
+    label: 'Random Angpow',
+    shortLabel: 'Angpow',
+    amount: '₱10–₱50',
+    probability: 10,
+    angle: 0,
+    className: 'angpow',
+  },
+  {
+    id: 'cash-20',
+    label: 'Cash Prize',
+    shortLabel: '₱20',
+    amount: '₱20',
+    probability: 50,
+    angle: 60,
+    className: '',
+  },
+  {
+    id: 'cash-30',
+    label: 'Cash Prize',
+    shortLabel: '₱30',
+    amount: '₱30',
+    probability: 25,
+    angle: 120,
+    className: '',
+  },
+  {
+    id: 'cash-50',
+    label: 'Cash Prize',
+    shortLabel: '₱50',
+    amount: '₱50',
+    probability: 10,
+    angle: 180,
+    className: '',
+  },
+  {
+    id: 'cash-100',
+    label: 'Cash Prize',
+    shortLabel: '₱100',
+    amount: '₱100',
+    probability: 5,
+    angle: 240,
+    className: '',
+  },
+  {
+    id: 'iphone-17-pro-max',
+    label: 'Grand Prize',
+    shortLabel: 'iPhone 17 Pro Max',
+    amount: 'iPhone 17 Pro Max',
+    probability: 0,
+    angle: 300,
+    className: 'iphone',
+  },
+]
