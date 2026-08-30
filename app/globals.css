@@ -20,4 +20,12 @@ a {
 button,
 input {
   font-family: inherit;
+  touch-action: manipulation;
+}
+
+button,
+a,
+[role='button'],
+[role='link'] {
+  -webkit-tap-highlight-color: transparent;
 }

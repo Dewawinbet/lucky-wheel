@@ -85,6 +85,9 @@ export const HeroDescription = styled(Box)(({ theme }) => ({
 }))
 
 export const SpinButton = styled(Button)({
+  display: 'inline-flex',
+  position: 'relative',
+  zIndex: 2,
   minWidth: 190,
   minHeight: 56,
   borderRadius: 16,
@@ -94,6 +97,12 @@ export const SpinButton = styled(Button)({
   background: 'linear-gradient(135deg, #8B5CF6, #EC4899)',
   boxShadow: '0 14px 40px rgba(139,92,246,0.3)',
   transition: 'all 0.25s ease',
+  touchAction: 'manipulation',
+  cursor: 'pointer',
+  pointerEvents: 'auto',
+  userSelect: 'none',
+  WebkitTapHighlightColor: 'transparent',
+  WebkitAppearance: 'none',
 
   '&:hover': {
     background: 'linear-gradient(135deg, #7C3AED, #DB2777)',
@@ -119,6 +128,8 @@ export const WheelVisual = styled(Box)(({ theme }) => ({
   justifyContent: 'center',
   cursor: 'pointer',
   textDecoration: 'none',
+  WebkitTapHighlightColor: 'transparent',
+  touchAction: 'manipulation',
 
   [theme.breakpoints.down('sm')]: {
     width: 'min(350px, 88vw)',
@@ -202,6 +213,7 @@ export const WheelLabel = styled(Box)(({ theme }) => ({
   textAlign: 'center',
   whiteSpace: 'normal',
   textShadow: '0 2px 8px rgba(0,0,0,0.35)',
+  pointerEvents: 'none',
   transform:
     'translate(-50%, -50%) rotate(var(--angle)) translateY(-128px) rotate(calc(var(--angle) * -1))',
 
@@ -276,6 +288,7 @@ export const Pointer = styled(Box)(({ theme }) => ({
   borderTop: '38px solid #FBBF24',
   filter: 'drop-shadow(0 5px 8px rgba(0,0,0,0.35))',
   animation: 'pointerBounce 4.8s ease-out 1',
+  pointerEvents: 'none',
 
   '@keyframes pointerBounce': {
     '0%, 100%': {

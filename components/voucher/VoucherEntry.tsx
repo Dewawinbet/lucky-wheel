@@ -1,9 +1,10 @@
 'use client'
 
-import { FormEvent, useState, useTransition } from 'react'
+import { KeyboardEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
+import { Alert, Snackbar } from '@mui/material'
 import {
   VoucherButton,
   VoucherCard,
@@ -13,7 +14,6 @@ import {
   VoucherInput,
   VoucherLogo,
   VoucherShell,
-  VoucherStatus,
   VoucherTitle,
 } from './VoucherEntry.styles'
 
@@ -26,56 +26,73 @@ export default function VoucherEntry() {
   const router = useRouter()
   const [code, setCode] = useState('')
   const [status, setStatus] = useState<VoucherStatusState>(null)
-  const [isPending, startTransition] = useTransition()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const normalizedCode = code.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8)
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const submitVoucher = async () => {
+    if (isSubmitting) {
+      return
+    }
 
     setStatus(null)
+    setIsSubmitting(true)
 
-    startTransition(async () => {
-      if (normalizedCode.length !== 8) {
+    if (code.length !== 8) {
+      setStatus({
+        type: 'error',
+        message: 'Enter a valid 8-character voucher code.',
+      })
+      setIsSubmitting(false)
+      return
+    }
+
+    try {
+      const response = await fetch('/api/voucher', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
+      })
+
+      const payload = (await response.json()) as { valid: boolean; message: string }
+
+      if (!response.ok || !payload.valid) {
         setStatus({
           type: 'error',
-          message: 'Enter a valid 8-character voucher code.',
+          message: payload.message || 'Voucher validation failed.',
         })
+        setIsSubmitting(false)
         return
       }
 
-      try {
-        const response = await fetch('/api/voucher', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ code: normalizedCode }),
-        })
+      setStatus({
+        type: 'success',
+        message: 'Voucher verified. Redirecting to the wheel…',
+      })
 
-        const payload = (await response.json()) as { valid: boolean; message: string }
+      setIsSubmitting(false)
+      router.push('/spin')
+    } catch {
+      setStatus({
+        type: 'error',
+        message: 'Unable to verify voucher right now. Please try again.',
+      })
+      setIsSubmitting(false)
+    }
+  }
 
-        if (!response.ok || !payload.valid) {
-          setStatus({
-            type: 'error',
-            message: payload.message || 'Voucher validation failed.',
-          })
-          return
-        }
+  const handleInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') {
+      return
+    }
 
-        setStatus({
-          type: 'success',
-          message: 'Voucher verified. Redirecting to the wheel…',
-        })
+    event.preventDefault()
 
-        router.push('/spin')
-      } catch {
-        setStatus({
-          type: 'error',
-          message: 'Unable to verify voucher right now. Please try again.',
-        })
-      }
-    })
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur()
+    }
+
+    void submitVoucher()
   }
 
   return (
@@ -96,10 +113,15 @@ export default function VoucherEntry() {
           Enter your 8-character code to unlock one secure spin session.
         </VoucherDescription>
 
-        <VoucherForm onSubmit={handleSubmit}>
+        <VoucherForm>
           <VoucherInput
-            value={normalizedCode}
-            onChange={(event) => setCode(event.target.value)}
+            value={code}
+            onChange={(event) =>
+              setCode(
+                event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8)
+              )
+            }
+            onKeyDown={handleInputKeyDown}
             placeholder="DG17GBX9"
             slotProps={{
               htmlInput: {
@@ -107,21 +129,57 @@ export default function VoucherEntry() {
                 autoCapitalize: 'characters',
                 autoCorrect: 'off',
                 spellCheck: false,
+                inputMode: 'text',
+                enterKeyHint: 'go',
+                autoComplete: 'off',
               },
             }}
           />
 
-          <VoucherButton type="submit" variant="contained" disabled={isPending}>
-            {isPending ? 'VERIFYING…' : 'VERIFY VOUCHER'}
+          <VoucherButton
+            type="button"
+            variant="contained"
+            disabled={isSubmitting}
+            onClick={() => {
+              if (document.activeElement instanceof HTMLElement) {
+                document.activeElement.blur()
+              }
+
+              void submitVoucher()
+            }}
+          >
+            {isSubmitting ? 'VERIFYING…' : 'VERIFY VOUCHER'}
           </VoucherButton>
         </VoucherForm>
-
-        {status ? (
-          <VoucherStatus severity={status.type === 'success' ? 'success' : 'error'}>
-            {status.message}
-          </VoucherStatus>
-        ) : null}
       </VoucherCard>
+
+      <Snackbar
+        open={Boolean(status)}
+        autoHideDuration={status?.type === 'success' ? 1200 : 2800}
+        onClose={() => setStatus(null)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        disableWindowBlurListener
+        key={status?.message}
+      >
+        <Alert
+          onClose={() => setStatus(null)}
+          severity={status?.type === 'success' ? 'success' : 'error'}
+          variant="filled"
+          sx={{
+            width: '100%',
+            minWidth: { xs: 'calc(100vw - 32px)', sm: 360 },
+            borderRadius: 2,
+            boxShadow: '0 18px 44px rgba(0,0,0,0.32)',
+            alignItems: 'center',
+            background:
+              status?.type === 'success'
+                ? 'linear-gradient(135deg, #0f766e, #14b8a6)'
+                : 'linear-gradient(135deg, #b91c1c, #ef4444)',
+          }}
+        >
+          {status?.message ?? ''}
+        </Alert>
+      </Snackbar>
     </VoucherShell>
   )
 }

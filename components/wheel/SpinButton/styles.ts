@@ -3,6 +3,10 @@
 import { Button, styled } from '@mui/material'
 
 export const ActionButton = styled(Button)({
+  position: 'relative',
+  zIndex: 2,
+  width: '100%',
+  maxWidth: 280,
   minWidth: 220,
   minHeight: 58,
   borderRadius: 18,
@@ -12,6 +16,12 @@ export const ActionButton = styled(Button)({
   letterSpacing: '0.04em',
   background: 'linear-gradient(135deg, #8B5CF6, #EC4899)',
   boxShadow: '0 14px 40px rgba(139,92,246,0.28)',
+  touchAction: 'manipulation',
+  cursor: 'pointer',
+  pointerEvents: 'auto',
+  userSelect: 'none',
+  WebkitTapHighlightColor: 'transparent',
+  WebkitAppearance: 'none',
 
   '&:hover': {
     background: 'linear-gradient(135deg, #7C3AED, #DB2777)',

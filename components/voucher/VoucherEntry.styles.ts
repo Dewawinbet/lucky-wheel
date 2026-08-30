@@ -1,6 +1,6 @@
 'use client'
 
-import { Alert, Box, Button, TextField, styled } from '@mui/material'
+import { Box, Button, TextField, styled } from '@mui/material'
 
 export const VoucherShell = styled(Box)(({ theme }) => ({
   minHeight: 'calc(100vh - 76px)',
@@ -161,6 +161,10 @@ export const VoucherInput = styled(TextField)(({ theme }) => ({
 }))
 
 export const VoucherButton = styled(Button)({
+  position: 'relative',
+  zIndex: 2,
+  width: '100%',
+  maxWidth: 320,
   minWidth: 220,
   minHeight: 58,
   borderRadius: 18,
@@ -170,18 +174,14 @@ export const VoucherButton = styled(Button)({
   letterSpacing: '0.08em',
   background: 'linear-gradient(135deg, #8B5CF6, #EC4899)',
   boxShadow: '0 14px 40px rgba(139,92,246,0.28)',
+  cursor: 'pointer',
+  userSelect: 'none',
 
   '&:hover': {
     background: 'linear-gradient(135deg, #7C3AED, #DB2777)',
   },
-})
 
-export const VoucherStatus = styled(Alert)({
-  marginTop: 18,
-  borderRadius: 16,
-  alignItems: 'center',
-  justifyContent: 'center',
-  textAlign: 'center',
-  background: 'rgba(17,22,42,0.88)',
-  border: '1px solid rgba(255,255,255,0.08)',
+  '&.Mui-disabled': {
+    pointerEvents: 'none',
+  },
 })

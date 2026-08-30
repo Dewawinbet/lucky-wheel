@@ -147,6 +147,8 @@ export const WheelZone = styled(Box)(({ theme }) => ({
   padding: '0 0 4px',
   cursor: 'pointer',
   touchAction: 'manipulation',
+  WebkitTapHighlightColor: 'transparent',
+  userSelect: 'none',
 
   [theme.breakpoints.down('sm')]: {
     paddingTop: 2,
