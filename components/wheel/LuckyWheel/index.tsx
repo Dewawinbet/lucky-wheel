@@ -230,7 +230,7 @@ export default function LuckyWheel({
             <Typography sx={{ color: '#A7B0C5', fontSize: 14, lineHeight: 1.7 }}>
               {spinLocked
                 ? 'This prize is already recorded and the same voucher cannot be used again.'
-                : 'The result is selected on the server using your configured prize probabilities and recorded once the spin is made.'}
+                : 'The result is selected when the wheel stops spinning and is securely recorded once the spin is made.'}
             </Typography>
             {error ? (
               <Typography sx={{ color: '#FCA5A5', fontSize: 14, lineHeight: 1.6 }}>
