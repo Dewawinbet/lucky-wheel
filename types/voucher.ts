@@ -1,6 +1,7 @@
 export interface VoucherValidationResponse {
   valid: boolean
   message: string
+  resumed?: boolean
 }
 
 export interface VoucherRecord {

@@ -60,26 +60,71 @@ export async function POST(request: Request) {
     )
   }
 
-  const nowIso = new Date().toISOString()
-  const { data: existingSession } = await supabase
+  const { data: existingSession, error: existingSessionError } = await supabase
     .from('spin_sessions')
     .select('id, expires_at')
     .eq('voucher_id', voucher.id)
     .is('consumed_at', null)
-    .gt('expires_at', nowIso)
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle()
 
-  if (existingSession) {
+  if (existingSessionError) {
+    console.error('Spin session lookup failed', {
+      voucherId: voucher.id,
+      error: existingSessionError,
+    })
+
     return NextResponse.json<VoucherValidationResponse>(
-      {
-        valid: false,
-        message:
-          'This voucher already has an active spin session. Complete that spin or wait for the session to expire.',
-      },
-      { status: 409 }
+      { valid: false, message: 'Could not validate your voucher session.' },
+      { status: 500 }
     )
+  }
+
+  if (existingSession) {
+    const isExpired = new Date(existingSession.expires_at).getTime() <= Date.now()
+
+    if (!isExpired) {
+      const resumedSessionToken = createSpinSessionToken()
+      const resumedTokenHash = hashSpinSessionToken(resumedSessionToken)
+      const resumedExpiresAt = getSpinSessionExpiry()
+
+      const { error: resumeSessionError } = await supabase
+        .from('spin_sessions')
+        .update({
+          token_hash: resumedTokenHash,
+          expires_at: resumedExpiresAt.toISOString(),
+        })
+        .eq('id', existingSession.id)
+        .is('consumed_at', null)
+
+      if (resumeSessionError) {
+        console.error('Spin session resume failed', {
+          sessionId: existingSession.id,
+          error: resumeSessionError,
+        })
+
+        return NextResponse.json<VoucherValidationResponse>(
+          { valid: false, message: 'Could not resume your pending spin session.' },
+          { status: 500 }
+        )
+      }
+
+      const cookieStore = await cookies()
+      cookieStore.set(SPIN_SESSION_COOKIE, resumedSessionToken, {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+        path: '/',
+        maxAge: SPIN_SESSION_TTL_MINUTES * 60,
+      })
+
+      return NextResponse.json<VoucherValidationResponse>({
+        valid: true,
+        resumed: true,
+        message: 'Your pending spin is ready. Redirecting you back to the wheel…',
+      })
+    }
   }
 
   const sessionToken = createSpinSessionToken()
