@@ -2,6 +2,7 @@
 
 import { KeyboardEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 import { Alert, Snackbar } from '@mui/material'
@@ -110,20 +111,14 @@ export default function VoucherEntry() {
             <VerifyPanel>
               <VerifySpinner aria-hidden="true">
                 <VerifySpinnerCore>
-                  <VoucherLogo
-                    sx={{
-                      width: 34,
-                      height: 34,
-                      minWidth: 34,
-                      marginBottom: 0,
-                      borderRadius: 10,
-                      boxShadow: 'none',
-                    }}
-                  >
-                    <ConfirmationNumberOutlinedIcon
-                      sx={{ color: '#fff', fontSize: 18 }}
-                    />
-                  </VoucherLogo>
+                  <Image
+                    src="/80x80.png"
+                    alt="DEVAWINBET"
+                    width={34}
+                    height={34}
+                    priority
+                    style={{ display: 'block', objectFit: 'contain' }}
+                  />
                 </VerifySpinnerCore>
               </VerifySpinner>
               <VerifyLabel>DEVAWINBET SECURE CHECK</VerifyLabel>
