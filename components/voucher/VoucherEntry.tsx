@@ -6,6 +6,13 @@ import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumb
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 import { Alert, Snackbar } from '@mui/material'
 import {
+  VerifyLabel,
+  VerifyOverlay,
+  VerifyPanel,
+  VerifySpinner,
+  VerifySpinnerCore,
+  VerifyText,
+  VerifyTitle,
   VoucherButton,
   VoucherCard,
   VoucherDescription,
@@ -98,6 +105,36 @@ export default function VoucherEntry() {
   return (
     <VoucherShell>
       <VoucherCard>
+        {isSubmitting ? (
+          <VerifyOverlay>
+            <VerifyPanel>
+              <VerifySpinner aria-hidden="true">
+                <VerifySpinnerCore>
+                  <VoucherLogo
+                    sx={{
+                      width: 34,
+                      height: 34,
+                      minWidth: 34,
+                      marginBottom: 0,
+                      borderRadius: 10,
+                      boxShadow: 'none',
+                    }}
+                  >
+                    <ConfirmationNumberOutlinedIcon
+                      sx={{ color: '#fff', fontSize: 18 }}
+                    />
+                  </VoucherLogo>
+                </VerifySpinnerCore>
+              </VerifySpinner>
+              <VerifyLabel>DEVAWINBET SECURE CHECK</VerifyLabel>
+              <VerifyTitle>Verifying voucher</VerifyTitle>
+              <VerifyText>
+                Confirming your code and preparing a one-time spin session.
+              </VerifyText>
+            </VerifyPanel>
+          </VerifyOverlay>
+        ) : null}
+
         <VoucherLogo>
           <ConfirmationNumberOutlinedIcon sx={{ color: '#fff', fontSize: 38 }} />
         </VoucherLogo>

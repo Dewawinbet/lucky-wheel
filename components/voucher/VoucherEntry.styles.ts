@@ -185,3 +185,94 @@ export const VoucherButton = styled(Button)({
     pointerEvents: 'none',
   },
 })
+
+export const VerifyOverlay = styled(Box)({
+  position: 'absolute',
+  inset: 0,
+  zIndex: 5,
+  display: 'grid',
+  placeItems: 'center',
+  padding: 24,
+  background:
+    'linear-gradient(180deg, rgba(10,14,30,0.82) 0%, rgba(8,11,26,0.9) 100%)',
+  backdropFilter: 'blur(10px)',
+})
+
+export const VerifyPanel = styled(Box)({
+  width: 'min(100%, 320px)',
+  display: 'grid',
+  justifyItems: 'center',
+  gap: 14,
+  padding: '24px 22px',
+  borderRadius: 24,
+  background:
+    'linear-gradient(180deg, rgba(20,26,50,0.96) 0%, rgba(10,14,30,0.98) 100%)',
+  border: '1px solid rgba(167,139,250,0.24)',
+  boxShadow:
+    '0 26px 60px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.06)',
+  textAlign: 'center',
+})
+
+export const VerifySpinner = styled(Box)({
+  position: 'relative',
+  width: 88,
+  height: 88,
+  borderRadius: '50%',
+  display: 'grid',
+  placeItems: 'center',
+  background:
+    'conic-gradient(from 0deg, rgba(139,92,246,0.12), rgba(236,72,153,0.9), rgba(251,191,36,0.92), rgba(59,130,246,0.84), rgba(139,92,246,0.12))',
+  animation: 'voucherSpin 1.15s linear infinite',
+  boxShadow:
+    '0 0 24px rgba(236,72,153,0.16), 0 0 44px rgba(139,92,246,0.18)',
+
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    inset: 8,
+    borderRadius: '50%',
+    background: 'linear-gradient(180deg, #141c35 0%, #0b1123 100%)',
+  },
+
+  '@keyframes voucherSpin': {
+    from: { transform: 'rotate(0deg)' },
+    to: { transform: 'rotate(360deg)' },
+  },
+})
+
+export const VerifySpinnerCore = styled(Box)({
+  position: 'relative',
+  zIndex: 1,
+  width: 54,
+  height: 54,
+  borderRadius: '50%',
+  display: 'grid',
+  placeItems: 'center',
+  background:
+    'radial-gradient(circle at 30% 30%, #fff6d1 0%, #f3be49 30%, #cb7f13 62%, #7b4205 100%)',
+  boxShadow:
+    'inset 0 2px 2px rgba(255,255,255,0.45), inset 0 -8px 14px rgba(102,50,0,0.34)',
+})
+
+export const VerifyLabel = styled(Box)({
+  color: '#C4B5FD',
+  fontSize: 11,
+  fontWeight: 800,
+  letterSpacing: '0.18em',
+  textTransform: 'uppercase',
+})
+
+export const VerifyTitle = styled(Box)({
+  color: '#fff',
+  fontSize: 24,
+  fontWeight: 900,
+  letterSpacing: '-0.04em',
+  lineHeight: 1,
+})
+
+export const VerifyText = styled(Box)({
+  color: '#9FA9C3',
+  fontSize: 14,
+  lineHeight: 1.65,
+  maxWidth: 260,
+})
