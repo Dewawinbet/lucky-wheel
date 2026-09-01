@@ -1,41 +1,34 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
-import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined'
 import { Typography } from '@mui/material'
+import WheelDisplay from '@/components/wheel/WheelDisplay'
 import { PRIZES } from '@/constants/prize'
 import type { Prize, SpinResult } from '@/types/prize'
 import PrizeList from '@/components/wheel/PrizeList'
 import PrizeResult from '@/components/wheel/PrizeResult'
 import SpinButton from '@/components/wheel/SpinButton'
-import WheelPointer from '@/components/wheel/WheelPointer'
 import CelebrationToast from '@/components/wheel/CelebrationToast'
 import {
-  Description,
-  Eyebrow,
-  FooterMeta,
-  HubValue,
+  ActionCluster,
   BurstRing,
+  ResultGrid,
   ResultPanelWrap,
   RevealPlaceholder,
+  SpinFrame,
   SpinShell,
   SpinStage,
   StageFooter,
-  StageTop,
-  Title,
-  VoucherChip,
-  WheelDisc,
-  WheelGlow,
-  WheelHub,
-  WheelLabel,
+  StageHint,
   WheelZone,
 } from './styles'
 
-const SPINS = 6
+const SPINS = 10
+const SPIN_DURATION_MS = 9200
+const WHEEL_SEGMENT_CENTER_OFFSET = 30
 
 function getRotationForPrize(prize: Prize, completedSpins: number) {
-  const targetCenterAngle = prize.angle
+  const targetCenterAngle = prize.angle + WHEEL_SEGMENT_CENTER_OFFSET
   return completedSpins * 360 + SPINS * 360 + (360 - targetCenterAngle)
 }
 
@@ -115,7 +108,7 @@ export default function LuckyWheel({
         window.setTimeout(() => {
           setBurstActive(false)
         }, 900)
-      }, 5600)
+      }, SPIN_DURATION_MS)
     } catch {
       setError('Could not complete your spin.')
       setIsSpinning(false)
@@ -132,133 +125,85 @@ export default function LuckyWheel({
         onClose={() => setShowCelebration(false)}
       />
 
-      <SpinStage>
-        <StageTop>
-          <div>
-            <Eyebrow>
-              <AutoAwesomeIcon sx={{ fontSize: 14 }} />
-              VERIFIED VOUCHER
-            </Eyebrow>
-
-            <Title>
-              Spin once. <span>Claim your prize.</span>
-            </Title>
-
-            <Description>
-              Your code is confirmed and ready. Tap the wheel or press the button to
-              start your one-time spin and reveal what you have won.
-            </Description>
-          </div>
-
-          <VoucherChip
-            icon={<ConfirmationNumberOutlinedIcon sx={{ color: '#A78BFA !important' }} />}
-            label={voucherCode}
-          />
-        </StageTop>
-
-        <WheelZone
-          role={spinLocked ? undefined : 'button'}
-          tabIndex={spinLocked ? -1 : 0}
-          aria-label={spinLocked ? undefined : 'Spin the wheel'}
-          onClick={() => {
-            void handleSpin()
-          }}
-          onKeyDown={(event) => {
-            if (!spinLocked && (event.key === 'Enter' || event.key === ' ')) {
-              event.preventDefault()
+      <SpinFrame>
+        <SpinStage>
+          <WheelZone
+            role={spinLocked ? undefined : 'button'}
+            tabIndex={spinLocked ? -1 : 0}
+            aria-label={spinLocked ? undefined : 'Spin the wheel'}
+            onClick={() => {
               void handleSpin()
-            }
-          }}
-        >
-          <WheelGlow />
-          <BurstRing
-            style={
-              {
-                '--burst-scale': burstActive ? 1.08 : 0.78,
-                '--burst-opacity': burstActive ? 1 : 0,
-              } as React.CSSProperties
-            }
-          />
-          <WheelPointer />
-
-          <WheelDisc
-            style={
-              {
-                '--wheel-rotation': `${rotation}deg`,
-                '--wheel-burst-scale': burstActive ? 1.03 : 1,
-                '--wheel-burst-shadow': burstActive
-                  ? '0 0 0 6px rgba(255,255,255,0.12), 0 30px 90px rgba(0,0,0,0.46), 0 0 110px rgba(251,191,36,0.45)'
-                  : '0 0 0 5px rgba(255,255,255,0.06), 0 28px 70px rgba(0,0,0,0.42), 0 0 80px rgba(139,92,246,0.18)',
-              } as React.CSSProperties
-            }
+            }}
+            onKeyDown={(event) => {
+              if (!spinLocked && (event.key === 'Enter' || event.key === ' ')) {
+                event.preventDefault()
+                void handleSpin()
+              }
+            }}
           >
-            {PRIZES.map((prize) => (
-              <WheelLabel
-                key={prize.id}
-                className={prize.className}
-                style={{ '--angle': `${prize.angle}deg` } as React.CSSProperties}
-              >
-                {prize.id === 'iphone-17-pro-max' ? (
-                  <>
-                    iPhone 17
-                    <br />
-                    Pro Max
-                  </>
-                ) : (
-                  prize.shortLabel
-                )}
-              </WheelLabel>
-            ))}
+            <BurstRing
+              style={
+                {
+                  '--burst-scale': burstActive ? 1.08 : 0.78,
+                  '--burst-opacity': burstActive ? 1 : 0,
+                } as React.CSSProperties
+              }
+            />
 
-            <WheelHub>
-              <HubValue>
-                LUCKY
-                <br />
-                WHEEL
-              </HubValue>
-            </WheelHub>
-          </WheelDisc>
-        </WheelZone>
+            <WheelDisplay
+              rotation={rotation}
+              interactive={!spinLocked}
+              variant="hero"
+              role={spinLocked ? undefined : 'button'}
+              tabIndex={spinLocked ? -1 : 0}
+              ariaLabel={spinLocked ? undefined : 'Spin the wheel'}
+              onClick={() => {
+                void handleSpin()
+              }}
+              onKeyDown={(event) => {
+                if (!spinLocked && (event.key === 'Enter' || event.key === ' ')) {
+                  event.preventDefault()
+                  void handleSpin()
+                }
+              }}
+            />
 
-        <StageFooter>
-          <FooterMeta>
-            <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: 15 }}>
-              {spinLocked
-                ? 'Your result has been locked in.'
-                : 'Your voucher is ready for one secure spin.'}
-            </Typography>
-            <Typography sx={{ color: '#A7B0C5', fontSize: 14, lineHeight: 1.7 }}>
-              {spinLocked
-                ? 'This prize is already recorded and the same voucher cannot be used again.'
-                : 'The result is selected when the wheel stops spinning and is securely recorded once the spin is made.'}
-            </Typography>
+            <ActionCluster>
+              <SpinButton
+                disabled={spinLocked}
+                isSpinning={isSpinning}
+                onClick={() => {
+                  void handleSpin()
+                }}
+              />
+              <StageHint>
+                {spinLocked
+                  ? `Voucher ${voucherCode} has already been used for this result.`
+                  : `Voucher ${voucherCode} is verified and ready to spin.`}
+              </StageHint>
+            </ActionCluster>
+          </WheelZone>
+
+          <StageFooter>
             {error ? (
               <Typography sx={{ color: '#FCA5A5', fontSize: 14, lineHeight: 1.6 }}>
                 {error}
               </Typography>
             ) : null}
-          </FooterMeta>
+          </StageFooter>
+        </SpinStage>
+      </SpinFrame>
 
-          <SpinButton
-            disabled={spinLocked}
-            isSpinning={isSpinning}
-            onClick={() => {
-              void handleSpin()
-            }}
-          />
-        </StageFooter>
-      </SpinStage>
-
-      <ResultPanelWrap>
+      <ResultGrid>
         {showOutcome ? (
-          <>
+          <ResultPanelWrap>
             <PrizeResult
               title={resolvedResult?.label ?? activePrize.label}
               amount={resolvedResult?.amount ?? activePrize.amount}
               spinning={isSpinning}
             />
             <PrizeList prizes={[...PRIZES].reverse()} activePrizeId={activePrize.id} />
-          </>
+          </ResultPanelWrap>
         ) : (
           <RevealPlaceholder>
             <Typography sx={{ color: '#fff', fontSize: 24, fontWeight: 800, mb: 1.5 }}>
@@ -270,7 +215,7 @@ export default function LuckyWheel({
             </Typography>
           </RevealPlaceholder>
         )}
-      </ResultPanelWrap>
+      </ResultGrid>
     </SpinShell>
   )
 }
