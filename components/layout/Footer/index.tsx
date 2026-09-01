@@ -21,7 +21,7 @@ export default function Footer() {
             <FooterPoweredMark>
               <AutoAwesomeIcon sx={{ fontSize: 12, verticalAlign: 'middle' }} />
             </FooterPoweredMark>
-            <span>Powered by Devawinbet</span>
+            <span>Powered by DEVAWINBET</span>
           </FooterPowered>
         </FooterBrand>
 

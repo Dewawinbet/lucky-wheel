@@ -40,7 +40,7 @@ export default function Header() {
           <PoweredBy>
             <AutoAwesomeIcon sx={{ fontSize: 17, color: '#FBBF24' }} />
             <PoweredLabel>Powered by</PoweredLabel>
-            <PoweredBrand>Devawinbet</PoweredBrand>
+            <PoweredBrand>DEVAWINBET</PoweredBrand>
           </PoweredBy>
         </HeaderAction>
       </HeaderInner>

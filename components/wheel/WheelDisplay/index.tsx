@@ -1,14 +1,16 @@
 'use client'
 
 import type { KeyboardEventHandler } from 'react'
-import RedeemOutlinedIcon from '@mui/icons-material/RedeemOutlined'
+import Image from 'next/image'
+import { PRIZES } from '@/constants/prize'
 import {
   BrandMark,
   BrandWordmark,
   CenterHub,
   FrameGlow,
-  LightBulb,
   Pointer,
+  SliceLabel,
+  SliceLabelInner,
   StandBase,
   StandFoot,
   WheelDisc,
@@ -22,6 +24,7 @@ interface WheelDisplayProps {
   animateOnMount?: boolean
   interactive?: boolean
   variant?: 'hero' | 'stage'
+  labelRotation?: number
   onClick?: () => void
   onKeyDown?: KeyboardEventHandler<HTMLDivElement>
   tabIndex?: number
@@ -29,19 +32,34 @@ interface WheelDisplayProps {
   ariaLabel?: string
 }
 
-const LIGHT_ANGLES = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330]
-
 export default function WheelDisplay({
   rotation = 0,
   animateOnMount = false,
   interactive = false,
   variant = 'hero',
+  labelRotation = 0,
   onClick,
   onKeyDown,
   tabIndex,
   role,
   ariaLabel,
 }: WheelDisplayProps) {
+  const getLabelPosition = (prizeId: string, centerAngle: number) => {
+    const radiusByPrize: Record<string, number> = {
+      'iphone-17-pro-max': 0.28,
+      angpow: 0.31,
+      default: 0.34,
+    }
+
+    const radius = radiusByPrize[prizeId] ?? radiusByPrize.default
+    const radians = ((centerAngle - 90) * Math.PI) / 180
+
+    return {
+      left: `${50 + Math.cos(radians) * radius * 100}%`,
+      top: `${50 + Math.sin(radians) * radius * 100}%`,
+    }
+  }
+
   return (
     <WheelShell
       $interactive={interactive}
@@ -56,13 +74,6 @@ export default function WheelDisplay({
       <Pointer $animate={animateOnMount} />
 
       <WheelFrame>
-        {LIGHT_ANGLES.map((angle) => (
-          <LightBulb
-            key={angle}
-            style={{ '--light-angle': `${angle}deg` } as React.CSSProperties}
-          />
-        ))}
-
         <WheelDiscWrap
           $animate={animateOnMount}
           style={
@@ -72,18 +83,38 @@ export default function WheelDisplay({
             } as React.CSSProperties
           }
         >
-          <WheelDisc />
+          <WheelDisc>
+            {PRIZES.map((prize) => {
+              const position = getLabelPosition(prize.id, prize.angle)
+
+              return (
+                <SliceLabel
+                  key={prize.id}
+                  className={prize.className}
+                  style={position}
+                >
+                  <SliceLabelInner
+                    style={{ transform: `rotate(${-labelRotation}deg)` }}
+                  >
+                    {prize.wheelLabel.map((line) => (
+                      <span key={line}>{line}</span>
+                    ))}
+                  </SliceLabelInner>
+                </SliceLabel>
+              )
+            })}
+          </WheelDisc>
         </WheelDiscWrap>
       </WheelFrame>
 
       <CenterHub>
-        <RedeemOutlinedIcon />
+        <Image src="/80x80.png" alt="DEVAWINBET" width={80} height={80} priority />
       </CenterHub>
 
       <StandFoot />
       <StandBase>
         <BrandMark>Powered by</BrandMark>
-        <BrandWordmark>Devawinbet</BrandWordmark>
+        <BrandWordmark>DEVAWINBET</BrandWordmark>
       </StandBase>
     </WheelShell>
   )

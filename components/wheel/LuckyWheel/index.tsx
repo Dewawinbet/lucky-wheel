@@ -25,11 +25,9 @@ import {
 
 const SPINS = 10
 const SPIN_DURATION_MS = 9200
-const WHEEL_SEGMENT_CENTER_OFFSET = 30
 
 function getRotationForPrize(prize: Prize, completedSpins: number) {
-  const targetCenterAngle = prize.angle + WHEEL_SEGMENT_CENTER_OFFSET
-  return completedSpins * 360 + SPINS * 360 + (360 - targetCenterAngle)
+  return completedSpins * 360 + SPINS * 360 + (360 - prize.angle)
 }
 
 function getPrizeFromResult(result: Pick<SpinResult, 'prizeId'>) {
@@ -152,6 +150,7 @@ export default function LuckyWheel({
 
             <WheelDisplay
               rotation={rotation}
+              labelRotation={spinLocked && !isSpinning ? rotation : 0}
               interactive={!spinLocked}
               variant="hero"
               role={spinLocked ? undefined : 'button'}

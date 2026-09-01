@@ -91,30 +91,6 @@ export const WheelFrame = styled(Box)(({ theme }) => ({
   },
 }))
 
-export const LightBulb = styled(Box)({
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  width: 12,
-  height: 12,
-  borderRadius: '50%',
-  transform:
-    'translate(-50%, -50%) rotate(var(--light-angle)) translateY(-144px)',
-  background:
-    'radial-gradient(circle at 35% 35%, #fffbe1 0%, #ffe38c 32%, #f2b527 60%, #b46a08 100%)',
-  boxShadow:
-    '0 0 0 2px rgba(116,58,0,0.4), 0 0 12px rgba(255,214,102,0.75), 0 2px 6px rgba(0,0,0,0.3)',
-  zIndex: 4,
-  pointerEvents: 'none',
-
-  '@media (max-width: 600px)': {
-    width: 10,
-    height: 10,
-    transform:
-      'translate(-50%, -50%) rotate(var(--light-angle)) translateY(-122px)',
-  },
-})
-
 export const WheelDiscWrap = styled(Box, {
   shouldForwardProp: (prop) => prop !== '$animate',
 })<{ $animate?: boolean }>(({ $animate = false }) => ({
@@ -145,26 +121,135 @@ export const WheelDiscWrap = styled(Box, {
 }))
 
 export const WheelDisc = styled(Box)({
+  position: 'relative',
   width: '100%',
   aspectRatio: '1',
   borderRadius: '50%',
+  overflow: 'hidden',
   background: `
     radial-gradient(circle at 32% 26%, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0.14) 14%, transparent 26%),
     radial-gradient(circle at 68% 72%, rgba(255,184,77,0.22) 0%, transparent 24%),
-    radial-gradient(circle at center, transparent 0 33%, rgba(255,255,255,0.06) 33% 58%, transparent 58% 100%),
+    radial-gradient(circle at center, rgba(255,255,255,0.06) 0 16%, transparent 16% 100%),
     conic-gradient(
-      from -60deg,
+      from -30deg,
       #8b5cf6 0deg 60deg,
-      #ec4899 60deg 120deg,
-      #ffb11a 120deg 180deg,
-      #5865f2 180deg 240deg,
-      #ff416d 240deg 300deg,
-      #18c7c9 300deg 360deg
+      #ff3a71 60deg 120deg,
+      #5468ff 120deg 180deg,
+      #ffae18 180deg 240deg,
+      #e43f94 240deg 300deg,
+      #17c3c8 300deg 360deg
     )
   `,
   boxShadow:
     'inset 0 0 0 2px rgba(255,255,255,0.18), 0 0 0 10px rgba(255,255,255,0.94)',
+
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    inset: 0,
+    borderRadius: '50%',
+    background:
+      'radial-gradient(circle at 50% 18%, rgba(255,255,255,0.34), transparent 28%), radial-gradient(circle at 22% 42%, rgba(255,255,255,0.18), transparent 20%), radial-gradient(circle at 50% 50%, transparent 0 36%, rgba(15,23,42,0.12) 36% 100%)',
+    pointerEvents: 'none',
+  },
+
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    inset: '6% 6% 44% 6%',
+    borderRadius: '50%',
+    background: 'linear-gradient(180deg, rgba(255,255,255,0.28), transparent 88%)',
+    filter: 'blur(10px)',
+    pointerEvents: 'none',
+  },
 })
+
+export const SliceLabel = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: '28%',
+  display: 'grid',
+  justifyItems: 'center',
+  transform: 'translate(-50%, -50%)',
+  transformOrigin: 'center',
+  pointerEvents: 'none',
+  zIndex: 2,
+
+  '&.iphone': {
+    width: '34%',
+  },
+
+  '&.angpow': {
+    width: '32%',
+  },
+
+  [theme.breakpoints.down('sm')]: {
+    width: '30%',
+
+    '&.iphone': {
+      width: '36%',
+    },
+
+    '&.angpow': {
+      width: '34%',
+    },
+  },
+}))
+
+export const SliceLabelInner = styled(Box)(({ theme }) => ({
+  display: 'grid',
+  justifyItems: 'center',
+  gap: 2,
+  maxWidth: '100%',
+  color: '#fff',
+  fontWeight: 900,
+  textAlign: 'center',
+  textTransform: 'uppercase',
+  letterSpacing: '-0.03em',
+  lineHeight: 0.96,
+  textShadow: '0 6px 18px rgba(0,0,0,0.36), 0 2px 5px rgba(0,0,0,0.28)',
+
+  '& > span': {
+    display: 'block',
+    whiteSpace: 'nowrap',
+  },
+
+  '.iphone &': {
+    fontSize: 16,
+  },
+
+  '.angpow &': {
+    fontSize: 17,
+  },
+
+  fontSize: 20,
+
+  [theme.breakpoints.down('md')]: {
+    fontSize: 18,
+
+    '.iphone &': {
+      fontSize: 14,
+    },
+
+    '.angpow &': {
+      fontSize: 15,
+    },
+  },
+
+  [theme.breakpoints.down('sm')]: {
+    gap: 1,
+    fontSize: 15,
+
+    '.iphone &': {
+      fontSize: 11,
+    },
+
+    '.angpow &': {
+      fontSize: 12,
+    },
+  },
+}))
 
 export const CenterHub = styled(Box)(({ theme }) => ({
   position: 'absolute',
@@ -191,12 +276,13 @@ export const CenterHub = styled(Box)(({ theme }) => ({
     opacity: 0.92,
   },
 
-  '& svg': {
+  '& img': {
     position: 'relative',
     zIndex: 1,
-    color: '#1447d7',
-    fontSize: 34,
-    filter: 'drop-shadow(0 1px 0 rgba(255,255,255,0.45))',
+    width: '56%',
+    height: '56%',
+    objectFit: 'contain',
+    filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.26))',
   },
 
   [theme.breakpoints.down('sm')]: {
@@ -208,8 +294,9 @@ export const CenterHub = styled(Box)(({ theme }) => ({
       inset: 9,
     },
 
-    '& svg': {
-      fontSize: 28,
+    '& img': {
+      width: '58%',
+      height: '58%',
     },
   },
 }))
@@ -306,7 +393,8 @@ export const BrandWordmark = styled(Box)({
   color: '#fff6da',
   fontSize: 16,
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0.02em',
   lineHeight: 1,
+  textTransform: 'uppercase',
   textShadow: '0 1px 2px rgba(62,9,9,0.42)',
 })
