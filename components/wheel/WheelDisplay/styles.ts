@@ -148,10 +148,20 @@ export const WheelDisc = styled(Box)({
   width: '100%',
   aspectRatio: '1',
   borderRadius: '50%',
-  backgroundImage: "url('/lucky-wheel-casino.svg')",
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  backgroundRepeat: 'no-repeat',
+  background: `
+    radial-gradient(circle at 32% 26%, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0.14) 14%, transparent 26%),
+    radial-gradient(circle at 68% 72%, rgba(255,184,77,0.22) 0%, transparent 24%),
+    radial-gradient(circle at center, transparent 0 33%, rgba(255,255,255,0.06) 33% 58%, transparent 58% 100%),
+    conic-gradient(
+      from -60deg,
+      #8b5cf6 0deg 60deg,
+      #ec4899 60deg 120deg,
+      #ffb11a 120deg 180deg,
+      #5865f2 180deg 240deg,
+      #ff416d 240deg 300deg,
+      #18c7c9 300deg 360deg
+    )
+  `,
   boxShadow:
     'inset 0 0 0 2px rgba(255,255,255,0.18), 0 0 0 10px rgba(255,255,255,0.94)',
 })
