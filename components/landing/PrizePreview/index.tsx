@@ -5,7 +5,6 @@ import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined'
 import RedeemOutlinedIcon from '@mui/icons-material/RedeemOutlined'
 import LocalAtmOutlinedIcon from '@mui/icons-material/LocalAtmOutlined'
 import PhoneIphoneOutlinedIcon from '@mui/icons-material/PhoneIphoneOutlined'
-import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined'
 import { Typography } from '@mui/material'
 import { PRIZES } from '@/constants/prize'
 import {
@@ -19,10 +18,10 @@ import {
 const getPrizeIcon = (id: string) => {
   switch (id) {
     case 'iphone-17-pro-max':
-      return <WorkspacePremiumOutlinedIcon />
+      return <PhoneIphoneOutlinedIcon />
 
     case 'cash-100':
-      return <PhoneIphoneOutlinedIcon />
+      return <PaymentsOutlinedIcon />
 
     case 'cash-50':
       return <LocalAtmOutlinedIcon />
@@ -81,8 +80,8 @@ export default function PrizePreview() {
 
       <Cards>
         {displayPrizes.map((prize) => (
-          <PrizeCard key={prize.id}>
-            <PrizeIcon>
+          <PrizeCard key={prize.id} className={prize.id}>
+            <PrizeIcon className={prize.id}>
               {getPrizeIcon(prize.id)}
             </PrizeIcon>
 

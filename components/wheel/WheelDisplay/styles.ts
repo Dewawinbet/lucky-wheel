@@ -9,9 +9,11 @@ export const WheelShell = styled(Box, {
   $variant?: 'hero' | 'stage'
 }>(({ theme, $interactive, $variant = 'hero' }) => ({
   position: 'relative',
-  width: $variant === 'stage' ? 'min(640px, 100%)' : 'min(560px, 100%)',
-  aspectRatio: '1198 / 1313',
-  display: 'block',
+  width: $variant === 'stage' ? 'min(860px, 100%)' : 'min(760px, 100%)',
+  aspectRatio: '1 / 1.18',
+  display: 'grid',
+  justifyItems: 'center',
+  alignContent: 'start',
   margin: '0 auto',
   cursor: $interactive ? 'pointer' : 'default',
   WebkitTapHighlightColor: 'transparent',
@@ -21,65 +23,67 @@ export const WheelShell = styled(Box, {
   overflow: 'visible',
 
   [theme.breakpoints.down('md')]: {
-    width: 'min(520px, 100%)',
+    width: $variant === 'stage' ? 'min(760px, 100%)' : 'min(660px, 100%)',
   },
 
   [theme.breakpoints.down('sm')]: {
-    width: 'min(390px, 94vw)',
+    width: 'min(520px, 96vw)',
   },
 
   '@media (max-height: 860px)': {
-    width: $variant === 'stage' ? 'min(560px, 58vh, 100%)' : 'min(520px, 54vh, 100%)',
+    width: $variant === 'stage' ? 'min(720px, 74vh, 100%)' : 'min(640px, 68vh, 100%)',
   },
 }))
 
-export const StageFrame = styled(Box)({
-  position: 'absolute',
-  inset: 0,
-  zIndex: 1,
-  pointerEvents: 'none',
-
-  '& img': {
-    objectFit: 'contain',
-  },
-})
-
 export const FrameGlow = styled(Box)({
   position: 'absolute',
-  inset: '10% 14% 18%',
+  inset: '6% 6% 14%',
   zIndex: 0,
   background:
-    'radial-gradient(circle at center, rgba(46,103,255,0.3) 0%, rgba(125,52,255,0.18) 28%, rgba(236,72,153,0.12) 54%, transparent 76%)',
-  filter: 'blur(30px)',
+    'radial-gradient(circle at 50% 42%, rgba(42,214,255,0.24) 0%, rgba(100,120,255,0.22) 24%, rgba(170,88,255,0.24) 44%, rgba(255,81,166,0.18) 62%, transparent 78%)',
+  filter: 'blur(42px)',
   pointerEvents: 'none',
 })
 
 export const WheelShadow = styled(Box)({
   position: 'absolute',
   left: '50%',
-  bottom: '18.8%',
-  zIndex: 2,
-  width: '50%',
-  height: '5%',
+  top: '77%',
+  zIndex: 1,
+  width: '78%',
+  height: '8%',
   transform: 'translateX(-50%)',
   borderRadius: '50%',
   background:
-    'radial-gradient(circle, rgba(6,10,28,0.52) 0%, rgba(6,10,28,0.26) 48%, transparent 74%)',
-  filter: 'blur(10px)',
+    'radial-gradient(circle, rgba(4,6,18,0.52) 0%, rgba(4,6,18,0.24) 56%, transparent 78%)',
+  filter: 'blur(18px)',
   pointerEvents: 'none',
 })
 
 export const WheelOrbit = styled(Box)({
-  position: 'absolute',
-  left: '50%',
-  top: '38.45%',
-  zIndex: 3,
-  width: '63.8%',
+  position: 'relative',
+  zIndex: 2,
+  width: '100%',
   aspectRatio: '1',
-  transform: 'translate(-50%, -50%)',
   display: 'grid',
   placeItems: 'center',
+  marginTop: '0%',
   pointerEvents: 'none',
+})
+
+export const BaseImageWrap = styled(Box)({
+  position: 'absolute',
+  left: '50%',
+  bottom: '0.5%',
+  zIndex: 2,
+  width: '85%',
+  aspectRatio: '1884 / 745',
+  transform: 'translateX(-50%)',
+  pointerEvents: 'none',
+
+  '& img': {
+    objectFit: 'contain',
+  },
 })
 
 export const WheelDiscWrap = styled(Box, {
@@ -94,7 +98,7 @@ export const WheelDiscWrap = styled(Box, {
     ? 'wheelHeroSpin 4.8s cubic-bezier(0.16, 1, 0.3, 1) 1 forwards'
     : 'none',
   willChange: 'transform',
-  filter: 'drop-shadow(0 24px 28px rgba(0,0,0,0.28))',
+  filter: 'drop-shadow(0 30px 36px rgba(0,0,0,0.28))',
   pointerEvents: 'none',
 
   '@keyframes wheelHeroSpin': {
@@ -117,11 +121,36 @@ export const WheelSvg = styled('svg')({
   overflow: 'visible',
 })
 
+export const Pointer = styled(Box)({
+  position: 'absolute',
+  top: '-0.5%',
+  left: '50%',
+  zIndex: 8,
+  width: '11.5%',
+  aspectRatio: '0.82',
+  transform: 'translateX(-50%)',
+  clipPath: 'polygon(50% 100%, 0 0, 100% 0)',
+  background:
+    'linear-gradient(180deg, #FFEFAB 0%, #F6C44C 22%, #CF7D10 64%, #7E4304 100%)',
+  border: '4px solid rgba(129,70,7,0.95)',
+  borderRadius: '14px 14px 22px 22px',
+  boxShadow:
+    '0 12px 20px rgba(0,0,0,0.34), inset 0 2px 2px rgba(255,255,255,0.52)',
+
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    inset: '12% 18% 18%',
+    clipPath: 'polygon(50% 100%, 0 0, 100% 0)',
+    background: 'linear-gradient(180deg, #3B82F6 0%, #2454DB 54%, #132A8C 100%)',
+  },
+})
+
 export const CenterHub = styled(Box)({
   position: 'absolute',
   inset: '50% auto auto 50%',
   zIndex: 5,
-  width: '24%',
+  width: '19.5%',
   aspectRatio: '1',
   transform: 'translate(-50%, -50%)',
   borderRadius: '50%',

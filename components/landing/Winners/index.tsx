@@ -1,4 +1,5 @@
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined'
+import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded'
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined'
 import { Typography } from '@mui/material'
 import {
@@ -76,12 +77,24 @@ export default function Winners({ winners }: WinnersProps) {
                 <WorkspacePremiumOutlinedIcon />
               </WinnerMark>
 
+              <Typography
+                aria-hidden="true"
+                className="winner-burst"
+                component="span"
+              >
+                🎉
+              </Typography>
+
               <Typography sx={{ color: '#7F8AA5', fontSize: 12, fontWeight: 700 }}>
                 Voucher {winner.voucherCode}
               </Typography>
 
               <Typography
+                component="div"
                 sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
                   color: '#fff',
                   fontSize: { xs: 22, sm: 26 },
                   fontWeight: 900,
@@ -89,7 +102,15 @@ export default function Winners({ winners }: WinnersProps) {
                   mt: 1,
                 }}
               >
-                {winner.prizeLabel}
+                <AutoAwesomeRoundedIcon
+                  sx={{
+                    fontSize: { xs: 18, sm: 20 },
+                    color: '#FFE27A',
+                    filter: 'drop-shadow(0 0 10px rgba(255,226,122,0.45))',
+                    flexShrink: 0,
+                  }}
+                />
+                <span>{winner.prizeLabel}</span>
               </Typography>
 
               <MetaRow>

@@ -4,9 +4,10 @@ import type { CSSProperties, KeyboardEventHandler } from 'react'
 import Image from 'next/image'
 import { PRIZES } from '@/constants/prize'
 import {
+  BaseImageWrap,
   CenterHub,
   FrameGlow,
-  StageFrame,
+  Pointer,
   WheelDiscWrap,
   WheelOrbit,
   WheelShadow,
@@ -28,62 +29,83 @@ interface WheelDisplayProps {
 }
 
 const CENTER = 400
-const RIM_RADIUS = 390
-const LIGHT_RADIUS = 354
-const SLICE_OUTER_RADIUS = 402
-const SLICE_INNER_RADIUS = 142
+const SLICE_OUTER_RADIUS = 360
+const SLICE_INNER_RADIUS = 118
 const DIVIDER_ANGLES = [30, 90, 150, 210, 270, 330]
-const LIGHT_ANGLES = Array.from({ length: 26 }, (_, index) => (index * 360) / 26)
 
 const PRIZE_LAYOUTS: Record<
   string,
   {
-    iconRadius: number
-    labelRadius: number
+    groupRadius: number
+    groupAngleOffset?: number
+    groupDx?: number
+    groupDy?: number
+    arrangement: 'top' | 'right' | 'bottom' | 'left'
+    labelRotation?: number
     iconScale?: number
     labelSize: number
   }
 > = {
   'iphone-17-pro-max': {
-    iconRadius: 350,
-    labelRadius: 250,
-    iconScale: 1.02,
-    labelSize: 43,
+    groupRadius: 232,
+    groupDy: 18,
+    arrangement: 'top',
+    iconScale: 0.98,
+    labelSize: 28,
   },
   'cash-100': {
-    iconRadius: 350,
-    labelRadius: 250,
-    iconScale: .9,
-    labelSize: 56,
+    groupRadius: 232,
+    groupAngleOffset: 2,
+    groupDx: 6,
+    groupDy: 2,
+    arrangement: 'top',
+    iconScale: 0.98,
+    labelSize: 33,
   },
   'cash-50': {
-    iconRadius: 350,
-    labelRadius: 250,
-    iconScale: 1,
-    labelSize: 54,
+    groupRadius: 232,
+    groupAngleOffset: 2,
+    groupDx: 6,
+    groupDy: 10,
+    arrangement: 'top',
+    iconScale: 0.98,
+    labelSize: 33,
   },
   'cash-30': {
-    iconRadius: 350,
-    labelRadius: 250,
-    iconScale: 0.96,
-    labelSize: 56,
+    groupRadius: 232,
+    groupDy: 10,
+    arrangement: 'top',
+    iconScale: 0.98,
+    labelSize: 33,
   },
   'cash-20': {
-    iconRadius: 350,
-    labelRadius: 250,
+    groupRadius: 232,
+    groupAngleOffset: -2,
+    groupDx: -6,
+    groupDy: 10,
+    arrangement: 'top',
     iconScale: 0.98,
-    labelSize: 54,
+    labelSize: 33,
   },
   angpow: {
-    iconRadius: 350,
-    labelRadius: 240,
-    iconScale: 1,
-    labelSize: 42,
+    groupRadius: 232,
+    groupAngleOffset: -2,
+    groupDx: -4,
+    groupDy: 4,
+    arrangement: 'top',
+    iconScale: 0.98,
+    labelSize: 33,
   },
 }
 
-const SLICE_COLORS = ['#7A2EF6', '#FF2D8D', '#1C5CFF', '#FF9800', '#F33276', '#11C7C8']
-
+const SLICE_FILLS = [
+  'url(#sliceRoyalOne)',
+  'url(#sliceRoyalTwo)',
+  'url(#sliceRoyalThree)',
+  'url(#sliceRoyalFour)',
+  'url(#sliceRoyalFive)',
+  'url(#sliceRoyalSix)',
+]
 function polarToCartesian(angle: number, radius: number) {
   const radians = (angle * Math.PI) / 180
 
@@ -111,7 +133,7 @@ function describeSlicePath(centerAngle: number, innerRadius: number, outerRadius
 function renderWheelLabel(lines: string[], fontSize: number) {
   const lineHeight = fontSize * 0.92
   const startY = -((lines.length - 1) * lineHeight) / 2
-  const strokeWidth = fontSize >= 52 ? 8 : 6
+  const strokeWidth = fontSize >= 34 ? 6 : 4.5
 
   return lines.map((line, index) => (
     <text
@@ -142,113 +164,33 @@ function PrizeGraphic({ prizeId }: { prizeId: string }) {
     case 'iphone-17-pro-max':
       return (
         <g>
-          <rect
-            x="-22"
-            y="-44"
-            width="44"
-            height="88"
-            rx="12"
-            fill="#161A24"
-            stroke="#556078"
-            strokeWidth="4"
-          />
-          <rect
-            x="-18"
-            y="-38"
-            width="36"
-            height="76"
-            rx="9"
-            fill="url(#phoneBody)"
-          />
-          <circle cx="-10" cy="-26" r="4.5" fill="#D7E0EA" />
-          <circle cx="2" cy="-16" r="4.5" fill="#D7E0EA" />
-          <circle cx="-10" cy="-6" r="4.5" fill="#D7E0EA" />
-          <circle cx="8" cy="30" r="3.5" fill="#9CA3AF" opacity="0.65" />
+          <rect x="-20" y="-38" width="40" height="76" rx="11" fill="#1B202B" stroke="#5B6475" strokeWidth="4" />
+          <rect x="-16" y="-34" width="32" height="68" rx="8" fill="url(#phoneBody)" />
+          <circle cx="-8" cy="-20" r="4" fill="#D7E0EA" />
+          <circle cx="4" cy="-10" r="4" fill="#D7E0EA" />
+          <circle cx="-8" cy="0" r="4" fill="#D7E0EA" />
+          <circle cx="8" cy="24" r="3" fill="#9CA3AF" opacity="0.7" />
         </g>
       )
     case 'cash-100':
       return (
         <g>
-          <circle cx="-14" cy="10" r="22" fill="url(#coinGold)" stroke="#8B4A06" strokeWidth="4" />
-          <circle cx="18" cy="-8" r="25" fill="url(#coinGold)" stroke="#8B4A06" strokeWidth="4" />
-          <circle cx="8" cy="22" r="18" fill="url(#coinGold)" stroke="#8B4A06" strokeWidth="4" />
-          <text x="-14" y="13" fill="#A4550A" fontSize="24" fontWeight="900" textAnchor="middle">
-            ₱
-          </text>
-          <text x="18" y="-4" fill="#A4550A" fontSize="28" fontWeight="900" textAnchor="middle">
-            ₱
-          </text>
-          <text x="8" y="26" fill="#A4550A" fontSize="20" fontWeight="900" textAnchor="middle">
-            ₱
-          </text>
+          <circle cx="-14" cy="10" r="20" fill="url(#coinGold)" stroke="#8B4A06" strokeWidth="4" />
+          <circle cx="14" cy="-8" r="23" fill="url(#coinGold)" stroke="#8B4A06" strokeWidth="4" />
+          <circle cx="10" cy="20" r="16" fill="url(#coinGold)" stroke="#8B4A06" strokeWidth="4" />
+          <text x="-14" y="14" fill="#A4550A" fontSize="22" fontWeight="900" textAnchor="middle">₱</text>
+          <text x="14" y="-4" fill="#A4550A" fontSize="24" fontWeight="900" textAnchor="middle">₱</text>
+          <text x="10" y="24" fill="#A4550A" fontSize="18" fontWeight="900" textAnchor="middle">₱</text>
         </g>
       )
     case 'cash-50':
-      return (
-        <g>
-          <rect x="-34" y="-20" width="68" height="42" rx="10" fill="#D8ECFF" />
-          <rect x="-26" y="-28" width="68" height="42" rx="10" fill="#B8D8FF" opacity="0.92" />
-          <rect x="-18" y="-36" width="68" height="42" rx="10" fill="#E8F4FF" opacity="0.84" />
-          <rect x="-10" y="-30" width="20" height="30" rx="8" fill="#8AB8FF" />
-          <text x="0" y="-8" fill="#FFFFFF" fontSize="22" fontWeight="900" textAnchor="middle">
-            ₱
-          </text>
-        </g>
-      )
+      return <PrizeGraphic prizeId="cash-100" />
     case 'cash-30':
-      return (
-        <g>
-          <ellipse cx="-4" cy="12" rx="24" ry="10" fill="#9E5A08" opacity="0.38" />
-          <ellipse cx="-14" cy="20" rx="24" ry="10" fill="#9E5A08" opacity="0.22" />
-          <circle cx="-8" cy="12" r="22" fill="url(#coinGold)" stroke="#8B4A06" strokeWidth="4" />
-          <circle cx="22" cy="2" r="18" fill="url(#coinGold)" stroke="#8B4A06" strokeWidth="4" />
-          <text x="-8" y="16" fill="#A4550A" fontSize="24" fontWeight="900" textAnchor="middle">
-            ₱
-          </text>
-          <text x="22" y="6" fill="#A4550A" fontSize="20" fontWeight="900" textAnchor="middle">
-            ₱
-          </text>
-        </g>
-      )
+      return <PrizeGraphic prizeId="cash-100" />
     case 'cash-20':
-      return (
-        <g>
-          <g transform="rotate(-18)">
-            <rect x="-38" y="-18" width="76" height="40" rx="8" fill="#FCD0D9" />
-            <rect x="-34" y="-14" width="68" height="32" rx="6" fill="#FFB8C7" />
-            <rect x="-9" y="-14" width="18" height="32" rx="7" fill="#E95B74" />
-            <circle cx="0" cy="2" r="8" fill="#FFD6DF" />
-          </g>
-        </g>
-      )
+      return <PrizeGraphic prizeId="cash-100" />
     case 'angpow':
-      return (
-        <g>
-          <rect
-            x="-32"
-            y="-38"
-            width="64"
-            height="76"
-            rx="10"
-            fill="#D61B1F"
-            stroke="#8E0E14"
-            strokeWidth="4"
-          />
-          <path
-            d="M -32 -6 Q 0 20 32 -6"
-            fill="none"
-            stroke="#F9A93E"
-            strokeWidth="5"
-          />
-          <path
-            d="M -32 -10 L 0 12 L 32 -10"
-            fill="#F0584D"
-            stroke="#F7C56C"
-            strokeWidth="3"
-          />
-          <circle cx="0" cy="2" r="8" fill="#F5CA64" stroke="#8B4A06" strokeWidth="3" />
-        </g>
-      )
+      return <PrizeGraphic prizeId="cash-100" />
     default:
       return null
   }
@@ -266,23 +208,62 @@ function PrizeNode({
   labelRotation: number
 }) {
   const layout = PRIZE_LAYOUTS[prizeId]
-  const labelPosition = polarToCartesian(angle, layout.labelRadius)
-  const iconPosition = polarToCartesian(angle, layout.iconRadius)
+  const groupPosition = polarToCartesian(
+    angle + (layout.groupAngleOffset ?? 0),
+    layout.groupRadius
+  )
+  const groupX = groupPosition.x + (layout.groupDx ?? 0)
+  const groupY = groupPosition.y + (layout.groupDy ?? 0)
+  const textBlock = renderWheelLabel(labelLines, layout.labelSize)
+
+  if (layout.arrangement === 'top') {
+    return (
+      <g transform={`translate(${groupX} ${groupY})`}>
+        <g transform={`rotate(${-labelRotation})`}>
+          <g transform={`translate(0 -26) scale(${layout.iconScale ?? 1})`}>
+            <PrizeGraphic prizeId={prizeId} />
+          </g>
+          <g transform="translate(0 34)">{textBlock}</g>
+        </g>
+      </g>
+    )
+  }
+
+  if (layout.arrangement === 'bottom') {
+    return (
+      <g transform={`translate(${groupX} ${groupY})`}>
+        <g transform={`rotate(${-labelRotation})`}>
+          <g transform="translate(0 -10)">{textBlock}</g>
+          <g transform={`translate(0 42) scale(${layout.iconScale ?? 1})`}>
+            <PrizeGraphic prizeId={prizeId} />
+          </g>
+        </g>
+      </g>
+    )
+  }
+
+  if (layout.arrangement === 'left') {
+    return (
+      <g transform={`translate(${groupX} ${groupY})`}>
+        <g transform={`rotate(${-labelRotation + (layout.labelRotation ?? 0)})`}>
+          <g transform={`translate(-54 14) scale(${layout.iconScale ?? 1})`}>
+            <PrizeGraphic prizeId={prizeId} />
+          </g>
+          <g transform="translate(18 0)">{textBlock}</g>
+        </g>
+      </g>
+    )
+  }
 
   return (
-    <>
-      <g transform={`translate(${iconPosition.x} ${iconPosition.y})`}>
-        <g transform={`rotate(${-labelRotation}) scale(${layout.iconScale ?? 1})`}>
+    <g transform={`translate(${groupX} ${groupY})`}>
+      <g transform={`rotate(${-labelRotation + (layout.labelRotation ?? 0)})`}>
+        <g transform="translate(-18 0)">{textBlock}</g>
+        <g transform={`translate(56 14) scale(${layout.iconScale ?? 1})`}>
           <PrizeGraphic prizeId={prizeId} />
         </g>
       </g>
-
-      <g transform={`translate(${labelPosition.x} ${labelPosition.y})`}>
-        <g transform={`rotate(${-labelRotation})`}>
-          {renderWheelLabel(labelLines, layout.labelSize)}
-        </g>
-      </g>
-    </>
+    </g>
   )
 }
 
@@ -290,30 +271,59 @@ function WheelGraphic({ labelRotation }: { labelRotation: number }) {
   return (
     <WheelSvg viewBox="0 0 800 800" aria-hidden="true">
       <defs>
-        <linearGradient id="wheelRimGold" x1="120" y1="104" x2="680" y2="696" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#FFF4B6" />
-          <stop offset="0.14" stopColor="#F7C654" />
-          <stop offset="0.34" stopColor="#C77711" />
-          <stop offset="0.56" stopColor="#7B4305" />
-          <stop offset="0.82" stopColor="#F1C964" />
-          <stop offset="1" stopColor="#815009" />
+        <linearGradient id="rimOuter" x1="134" y1="96" x2="668" y2="706" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFF4C2" />
+          <stop offset="0.14" stopColor="#F8CF63" />
+          <stop offset="0.34" stopColor="#B87418" />
+          <stop offset="0.58" stopColor="#512A05" />
+          <stop offset="0.8" stopColor="#E9BE53" />
+          <stop offset="1" stopColor="#734108" />
         </linearGradient>
-        <linearGradient id="wheelInnerGold" x1="400" y1="56" x2="400" y2="744" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#FFF2BE" />
-          <stop offset="0.26" stopColor="#F4D57C" />
-          <stop offset="0.62" stopColor="#B86B0F" />
-          <stop offset="1" stopColor="#6E3905" />
+        <linearGradient id="rimInner" x1="400" y1="70" x2="400" y2="730" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFFBEE" />
+          <stop offset="0.18" stopColor="#F2DB98" />
+          <stop offset="0.52" stopColor="#A96A15" />
+          <stop offset="1" stopColor="#452204" />
         </linearGradient>
-        <linearGradient id="silverRing" x1="400" y1="80" x2="400" y2="720" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#FFFFFF" />
-          <stop offset="0.28" stopColor="#F3F6FB" />
-          <stop offset="0.7" stopColor="#C8D2E5" />
-          <stop offset="1" stopColor="#FFFFFF" />
+        <linearGradient id="sliceRoyalOne" x1="264" y1="150" x2="548" y2="324" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#E8B9FF" />
+          <stop offset="0.2" stopColor="#A45CFF" />
+          <stop offset="0.58" stopColor="#6120C5" />
+          <stop offset="1" stopColor="#22064E" />
         </linearGradient>
-        <linearGradient id="blueRing" x1="400" y1="234" x2="400" y2="566" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#2D6BFF" />
-          <stop offset="0.52" stopColor="#1E40AF" />
-          <stop offset="1" stopColor="#132869" />
+        <linearGradient id="sliceRoyalTwo" x1="514" y1="174" x2="698" y2="430" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F5B5FF" />
+          <stop offset="0.22" stopColor="#B64DFF" />
+          <stop offset="0.58" stopColor="#6A1FD5" />
+          <stop offset="1" stopColor="#260752" />
+        </linearGradient>
+        <linearGradient id="sliceRoyalThree" x1="614" y1="396" x2="546" y2="670" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#D7BEFF" />
+          <stop offset="0.22" stopColor="#8852FF" />
+          <stop offset="0.58" stopColor="#4B1DB0" />
+          <stop offset="1" stopColor="#1D083F" />
+        </linearGradient>
+        <linearGradient id="sliceRoyalFour" x1="520" y1="642" x2="282" y2="642" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#CDA8FF" />
+          <stop offset="0.2" stopColor="#7B44EE" />
+          <stop offset="0.56" stopColor="#431993" />
+          <stop offset="1" stopColor="#170630" />
+        </linearGradient>
+        <linearGradient id="sliceRoyalFive" x1="178" y1="548" x2="302" y2="288" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#E2B7FF" />
+          <stop offset="0.22" stopColor="#9650FF" />
+          <stop offset="0.56" stopColor="#5622B7" />
+          <stop offset="1" stopColor="#210747" />
+        </linearGradient>
+        <linearGradient id="sliceRoyalSix" x1="176" y1="268" x2="330" y2="480" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#D5B0FF" />
+          <stop offset="0.24" stopColor="#8247F7" />
+          <stop offset="0.58" stopColor="#4C1EA8" />
+          <stop offset="1" stopColor="#1B063B" />
+        </linearGradient>
+        <linearGradient id="phoneBody" x1="0" y1="-38" x2="0" y2="38" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#303743" />
+          <stop offset="1" stopColor="#12161F" />
         </linearGradient>
         <radialGradient id="coinGold" cx="0.35" cy="0.3" r="1">
           <stop stopColor="#FFF7D8" />
@@ -321,52 +331,28 @@ function WheelGraphic({ labelRotation }: { labelRotation: number }) {
           <stop offset="0.7" stopColor="#D88D17" />
           <stop offset="1" stopColor="#8A4C07" />
         </radialGradient>
-        <linearGradient id="phoneBody" x1="0" y1="-38" x2="0" y2="38" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#303743" />
-          <stop offset="1" stopColor="#12161F" />
-        </linearGradient>
-        <radialGradient id="wheelHighlight" cx="0.32" cy="0.18" r="0.92">
-          <stop stopColor="rgba(255,255,255,0.46)" />
-          <stop offset="0.28" stopColor="rgba(255,255,255,0.14)" />
-          <stop offset="1" stopColor="rgba(255,255,255,0)" />
-        </radialGradient>
         <radialGradient id="hubGold" cx="0.3" cy="0.3" r="1">
-          <stop stopColor="#FFF5C2" />
-          <stop offset="0.34" stopColor="#F5CA63" />
-          <stop offset="0.68" stopColor="#C17616" />
-          <stop offset="1" stopColor="#7E4406" />
+          <stop stopColor="#FFF5C9" />
+          <stop offset="0.32" stopColor="#F4C65E" />
+          <stop offset="0.58" stopColor="#D88F1F" />
+          <stop offset="1" stopColor="#7B4205" />
+        </radialGradient>
+        <radialGradient id="shine" cx="0.26" cy="0.2" r="0.9">
+          <stop stopColor="rgba(255,255,255,0.44)" />
+          <stop offset="0.24" stopColor="rgba(255,255,255,0.12)" />
+          <stop offset="1" stopColor="rgba(255,255,255,0)" />
         </radialGradient>
       </defs>
 
-      {/* <circle cx="400" cy="400" r={RIM_RADIUS} fill="url(#wheelRimGold)" />
-      <circle cx="400" cy="400" r="368" fill="url(#wheelInnerGold)" />
-      <circle cx="400" cy="400" r="350" fill="url(#silverRing)" />
-      <circle cx="400" cy="400" r="328" fill="#FDE7A3" opacity="0.94" /> */}
-
-      {/* {LIGHT_ANGLES.map((angle) => {
-        const light = polarToCartesian(angle, LIGHT_RADIUS)
-
-        return (
-          <circle
-            key={angle}
-            cx={light.x}
-            cy={light.y}
-            r="14"
-            fill="url(#coinGold)"
-            stroke="#91540D"
-            strokeWidth="4"
-          />
-        )
-      })} */}
-
-      <circle cx="400" cy="400" r="312" fill="#11244A" opacity="0.28" />
+      <circle cx="400" cy="400" r="390" fill="url(#rimOuter)" />
+      <circle cx="400" cy="400" r="368" fill="#2D1403" opacity="0.18" />
 
       {PRIZES.map((prize, index) => (
         <path
           key={prize.id}
           d={describeSlicePath(prize.angle, SLICE_INNER_RADIUS, SLICE_OUTER_RADIUS)}
-          fill={SLICE_COLORS[index]}
-          stroke="rgba(255,255,255,0.92)"
+          fill={SLICE_FILLS[index]}
+          stroke="#FFF1FB"
           strokeWidth="6"
           strokeLinejoin="round"
         />
@@ -375,7 +361,6 @@ function WheelGraphic({ labelRotation }: { labelRotation: number }) {
       {DIVIDER_ANGLES.map((angle) => {
         const start = polarToCartesian(angle, SLICE_INNER_RADIUS)
         const end = polarToCartesian(angle, SLICE_OUTER_RADIUS)
-
         return (
           <line
             key={angle}
@@ -383,18 +368,17 @@ function WheelGraphic({ labelRotation }: { labelRotation: number }) {
             y1={start.y}
             x2={end.x}
             y2={end.y}
-            stroke="rgba(255,255,255,0.52)"
+            stroke="rgba(255,255,255,0.34)"
             strokeWidth="4"
             strokeLinecap="round"
           />
         )
       })}
 
-      {/* <circle cx="400" cy="400" r="302" fill="none" stroke="rgba(255,255,255,0.48)" strokeWidth="4" />
-      <circle cx="400" cy="400" r="142" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="3" />
-      <circle cx="400" cy="400" r="188" fill="url(#blueRing)" opacity="0.66" />
-      <circle cx="400" cy="400" r="146" fill="#0C1331" opacity="0.22" />
-      <circle cx="400" cy="400" r="124" fill="url(#hubGold)" opacity="0.28" /> */}
+      <circle cx="400" cy="400" r="362" fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth="3" />
+      <circle cx="400" cy="400" r="330" fill="url(#shine)" opacity="0.54" />
+      <circle cx="400" cy="400" r="118" fill="rgba(20,10,24,0.34)" />
+      <circle cx="400" cy="400" r="108" fill="url(#hubGold)" opacity="0.24" />
 
       {PRIZES.map((prize) => (
         <PrizeNode
@@ -406,8 +390,6 @@ function WheelGraphic({ labelRotation }: { labelRotation: number }) {
         />
       ))}
 
-      <circle cx="400" cy="400" r="304" fill="url(#wheelHighlight)" opacity="0.56" />
-      <circle cx="400" cy="400" r="394" fill="none" stroke="rgba(255,255,255,0.14)" strokeWidth="10" />
     </WheelSvg>
   )
 }
@@ -435,18 +417,16 @@ export default function WheelDisplay({
       onKeyDown={onKeyDown}
     >
       <FrameGlow />
-
-      <StageFrame>
-        <Image
-          src="/wheelFrame.png"
-          alt=""
-          fill
-          priority
-          sizes="(max-width: 900px) 92vw, (max-width: 1400px) 44vw, 560px"
-        />
-      </StageFrame>
-
       <WheelShadow />
+      <BaseImageWrap>
+        <Image
+          src="/landingWheelBase.png"
+          alt="DEVAWINBET podium"
+          fill
+          sizes="(max-width: 900px) 84vw, (max-width: 1400px) 48vw, 720px"
+          priority
+        />
+      </BaseImageWrap>
 
       <WheelOrbit>
         <WheelDiscWrap
@@ -462,9 +442,11 @@ export default function WheelDisplay({
         </WheelDiscWrap>
 
         <CenterHub>
-          <Image src="/80x80.png" alt="DEVAWINBET" fill sizes="140px" priority />
+          <Image src="/80x80.png" alt="DEVAWINBET" fill sizes="160px" priority />
         </CenterHub>
       </WheelOrbit>
+
+      <Pointer />
     </WheelShell>
   )
 }

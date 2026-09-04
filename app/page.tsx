@@ -52,8 +52,8 @@ export default async function Home() {
 
       <main>
         <Hero />
-        <PrizePreview />
         <Winners winners={winners} />
+        <PrizePreview />
         <HowItWorks />
       </main>
 

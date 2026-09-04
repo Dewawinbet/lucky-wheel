@@ -56,6 +56,17 @@ export default function HowItWorks() {
         >
           Three simple steps
         </Typography>
+
+        <Typography
+          sx={{
+            mt: 1.5,
+            color: 'text.secondary',
+            lineHeight: 1.7,
+          }}
+        >
+          From voucher entry to prize reveal, the flow is quick, secure and made to
+          feel like a live game moment.
+        </Typography>
       </Box>
 
       <Steps>

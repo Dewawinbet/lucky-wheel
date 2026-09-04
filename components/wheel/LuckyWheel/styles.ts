@@ -18,7 +18,7 @@ export const SpinShell = styled(Box)(({ theme }) => ({
 export const SpinFrame = styled(Box)(({ theme }) => ({
   position: 'relative',
   borderRadius: 40,
-  padding: '24px 26px 18px',
+  padding: '4px 26px 18px',
   background:
     'linear-gradient(180deg, rgba(10,14,30,0.82) 0%, rgba(6,9,20,0.9) 100%)',
   border: '1px solid rgba(255,255,255,0.05)',
@@ -84,7 +84,7 @@ export const WheelZone = styled(Box)(({ theme }) => ({
   touchAction: 'manipulation',
   WebkitTapHighlightColor: 'transparent',
   userSelect: 'none',
-  gap: 14,
+  gap: 10,
 
   [theme.breakpoints.down('sm')]: {
     gap: 12,
@@ -112,7 +112,8 @@ export const ActionCluster = styled(Box)({
   width: '100%',
   display: 'grid',
   justifyItems: 'center',
-  gap: 10,
+  gap: 8,
+  marginTop: -18,
   pointerEvents: 'none',
 
   '& > *': {
@@ -126,6 +127,7 @@ export const StageHint = styled(Box)({
   fontWeight: 600,
   letterSpacing: '0.02em',
   textAlign: 'center',
+  marginTop: -2,
 })
 
 export const StageFooter = styled(Box)({
