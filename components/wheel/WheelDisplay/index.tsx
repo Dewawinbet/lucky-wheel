@@ -99,12 +99,12 @@ const PRIZE_LAYOUTS: Record<
 }
 
 const SLICE_FILLS = [
-  'url(#sliceRoyalOne)',
-  'url(#sliceRoyalTwo)',
-  'url(#sliceRoyalThree)',
-  'url(#sliceRoyalFour)',
-  'url(#sliceRoyalFive)',
-  'url(#sliceRoyalSix)',
+  'url(#sliceBlueOne)',
+  'url(#sliceRedOne)',
+  'url(#sliceGoldOne)',
+  'url(#sliceBlueTwo)',
+  'url(#sliceRedTwo)',
+  'url(#sliceGoldTwo)',
 ]
 function polarToCartesian(angle: number, radius: number) {
   const radians = (angle * Math.PI) / 180
@@ -285,41 +285,53 @@ function WheelGraphic({ labelRotation }: { labelRotation: number }) {
           <stop offset="0.52" stopColor="#A96A15" />
           <stop offset="1" stopColor="#452204" />
         </linearGradient>
-        <linearGradient id="sliceRoyalOne" x1="264" y1="150" x2="548" y2="324" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#E8B9FF" />
-          <stop offset="0.2" stopColor="#A45CFF" />
-          <stop offset="0.58" stopColor="#6120C5" />
-          <stop offset="1" stopColor="#22064E" />
+        <linearGradient id="sliceBlueOne" x1="264" y1="150" x2="548" y2="324" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#E4F6FF" />
+          <stop offset="0.12" stopColor="#7FD3FF" />
+          <stop offset="0.28" stopColor="#2D9FFF" />
+          <stop offset="0.52" stopColor="#0E63E6" />
+          <stop offset="0.76" stopColor="#0A3C98" />
+          <stop offset="1" stopColor="#05173F" />
         </linearGradient>
-        <linearGradient id="sliceRoyalTwo" x1="514" y1="174" x2="698" y2="430" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#F5B5FF" />
-          <stop offset="0.22" stopColor="#B64DFF" />
-          <stop offset="0.58" stopColor="#6A1FD5" />
-          <stop offset="1" stopColor="#260752" />
+        <linearGradient id="sliceRedOne" x1="514" y1="174" x2="698" y2="430" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFE0E6" />
+          <stop offset="0.12" stopColor="#FFA0B5" />
+          <stop offset="0.28" stopColor="#FF4B77" />
+          <stop offset="0.52" stopColor="#D91A49" />
+          <stop offset="0.76" stopColor="#8F102F" />
+          <stop offset="1" stopColor="#420716" />
         </linearGradient>
-        <linearGradient id="sliceRoyalThree" x1="614" y1="396" x2="546" y2="670" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#D7BEFF" />
-          <stop offset="0.22" stopColor="#8852FF" />
-          <stop offset="0.58" stopColor="#4B1DB0" />
-          <stop offset="1" stopColor="#1D083F" />
+        <linearGradient id="sliceGoldOne" x1="614" y1="396" x2="546" y2="670" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFF7D5" />
+          <stop offset="0.12" stopColor="#FFE38A" />
+          <stop offset="0.28" stopColor="#FFC93A" />
+          <stop offset="0.52" stopColor="#D88A00" />
+          <stop offset="0.76" stopColor="#935300" />
+          <stop offset="1" stopColor="#482300" />
         </linearGradient>
-        <linearGradient id="sliceRoyalFour" x1="520" y1="642" x2="282" y2="642" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#CDA8FF" />
-          <stop offset="0.2" stopColor="#7B44EE" />
-          <stop offset="0.56" stopColor="#431993" />
-          <stop offset="1" stopColor="#170630" />
+        <linearGradient id="sliceBlueTwo" x1="520" y1="642" x2="282" y2="642" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F0FAFF" />
+          <stop offset="0.12" stopColor="#9DDAFF" />
+          <stop offset="0.28" stopColor="#4F8DFF" />
+          <stop offset="0.52" stopColor="#2357D1" />
+          <stop offset="0.76" stopColor="#15328A" />
+          <stop offset="1" stopColor="#09173F" />
         </linearGradient>
-        <linearGradient id="sliceRoyalFive" x1="178" y1="548" x2="302" y2="288" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#E2B7FF" />
-          <stop offset="0.22" stopColor="#9650FF" />
-          <stop offset="0.56" stopColor="#5622B7" />
-          <stop offset="1" stopColor="#210747" />
+        <linearGradient id="sliceRedTwo" x1="178" y1="548" x2="302" y2="288" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFE5EB" />
+          <stop offset="0.12" stopColor="#FFB0C0" />
+          <stop offset="0.28" stopColor="#FF5A82" />
+          <stop offset="0.52" stopColor="#C81D45" />
+          <stop offset="0.76" stopColor="#821130" />
+          <stop offset="1" stopColor="#3D0617" />
         </linearGradient>
-        <linearGradient id="sliceRoyalSix" x1="176" y1="268" x2="330" y2="480" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#D5B0FF" />
-          <stop offset="0.24" stopColor="#8247F7" />
-          <stop offset="0.58" stopColor="#4C1EA8" />
-          <stop offset="1" stopColor="#1B063B" />
+        <linearGradient id="sliceGoldTwo" x1="176" y1="268" x2="330" y2="480" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFFBE8" />
+          <stop offset="0.12" stopColor="#FFE59B" />
+          <stop offset="0.28" stopColor="#FFC93A" />
+          <stop offset="0.52" stopColor="#CC8400" />
+          <stop offset="0.76" stopColor="#8A4C00" />
+          <stop offset="1" stopColor="#432100" />
         </linearGradient>
         <linearGradient id="phoneBody" x1="0" y1="-38" x2="0" y2="38" gradientUnits="userSpaceOnUse">
           <stop stopColor="#303743" />
