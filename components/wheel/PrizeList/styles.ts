@@ -30,14 +30,6 @@ export const ItemCard = styled(Box)({
     transform: 'translateY(-3px)',
   },
 
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    inset: '0 0 auto 0',
-    height: 3,
-    background: 'linear-gradient(90deg, #FFD86B 0%, #FF66A3 50%, #48E8E0 100%)',
-  },
-
   '& > *': {
     position: 'relative',
     zIndex: 1,

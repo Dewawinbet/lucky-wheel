@@ -87,26 +87,35 @@ export const BaseImageWrap = styled(Box)({
 })
 
 export const WheelDiscWrap = styled(Box, {
-  shouldForwardProp: (prop) => prop !== '$animate',
-})<{ $animate?: boolean }>(({ $animate = false }) => ({
+  shouldForwardProp: (prop) => prop !== '$animate' && prop !== '$direction',
+})<{ $animate?: boolean; $direction?: 'clockwise' | 'counterclockwise' }>(
+  ({ $animate = false, $direction = 'clockwise' }) => ({
   '--wheel-rest-angle': '0deg',
   position: 'relative',
   width: '100%',
   height: '100%',
   transition: 'transform 9.2s cubic-bezier(0.06, 0.88, 0.14, 1)',
   animation: $animate
-    ? 'wheelHeroSpin 4.8s cubic-bezier(0.16, 1, 0.3, 1) 1 forwards'
+    ? `${$direction === 'clockwise' ? 'wheelHeroSpinClockwise' : 'wheelHeroSpinCounterClockwise'} 4.8s cubic-bezier(0.16, 1, 0.3, 1) 1 forwards`
     : 'none',
   willChange: 'transform',
   filter: 'drop-shadow(0 30px 36px rgba(0,0,0,0.28))',
   pointerEvents: 'none',
 
-  '@keyframes wheelHeroSpin': {
+  '@keyframes wheelHeroSpinClockwise': {
     '0%': { transform: 'rotate(0deg)' },
     '14%': { transform: 'rotate(26deg)' },
     '68%': { transform: 'rotate(calc(5turn + var(--wheel-rest-angle) - 10deg))' },
     '82%': { transform: 'rotate(calc(5turn + var(--wheel-rest-angle) + 6deg))' },
     '100%': { transform: 'rotate(calc(5turn + var(--wheel-rest-angle)))' },
+  },
+
+  '@keyframes wheelHeroSpinCounterClockwise': {
+    '0%': { transform: 'rotate(0deg)' },
+    '14%': { transform: 'rotate(-26deg)' },
+    '68%': { transform: 'rotate(calc(-5turn + var(--wheel-rest-angle) + 10deg))' },
+    '82%': { transform: 'rotate(calc(-5turn + var(--wheel-rest-angle) - 6deg))' },
+    '100%': { transform: 'rotate(calc(-5turn + var(--wheel-rest-angle)))' },
   },
 
   '@media (prefers-reduced-motion: reduce)': {

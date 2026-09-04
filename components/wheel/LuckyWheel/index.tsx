@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { Typography } from '@mui/material'
+import BrandStatusModal from '@/components/feedback/BrandStatusModal'
 import WheelDisplay from '@/components/wheel/WheelDisplay'
 import { PRIZES } from '@/constants/prize'
 import type { Prize, SpinResult } from '@/types/prize'
@@ -18,7 +19,6 @@ import {
   SpinFrame,
   SpinShell,
   SpinStage,
-  StageFooter,
   StageHint,
   WheelZone,
 } from './styles'
@@ -45,6 +45,7 @@ export default function LuckyWheel({
   initialResult,
   hasSpun,
 }: LuckyWheelProps) {
+  const lockedVoucherMessage = `Voucher ${voucherCode} has already been used for this result.`
   const initialPrize = initialResult ? getPrizeFromResult(initialResult) : PRIZES[0]
   const [activePrize, setActivePrize] = useState<Prize>(initialPrize)
   const [resolvedResult, setResolvedResult] = useState<Omit<SpinResult, 'angle'> | null>(
@@ -55,7 +56,17 @@ export default function LuckyWheel({
   )
   const [isSpinning, setIsSpinning] = useState(false)
   const [spinLocked, setSpinLocked] = useState(hasSpun)
-  const [error, setError] = useState<string | null>(null)
+  const [statusModal, setStatusModal] = useState<{
+    title: string
+    message: string
+  } | null>(
+    hasSpun
+      ? {
+          title: 'Prize already locked',
+          message: `${lockedVoucherMessage} Your recorded prize is ready below.`,
+        }
+      : null
+  )
   const [showOutcome, setShowOutcome] = useState(hasSpun)
   const [showCelebration, setShowCelebration] = useState(false)
   const [burstActive, setBurstActive] = useState(false)
@@ -66,7 +77,7 @@ export default function LuckyWheel({
       return
     }
 
-    setError(null)
+    setStatusModal(null)
     setIsSpinning(true)
     setShowOutcome(false)
     setShowCelebration(false)
@@ -85,7 +96,10 @@ export default function LuckyWheel({
       }
 
       if (!response.ok || !payload.ok || !payload.result) {
-        setError(payload.message || 'Could not complete your spin.')
+        setStatusModal({
+          title: 'Spin could not be completed',
+          message: payload.message || 'Could not complete your spin.',
+        })
         setIsSpinning(false)
         return
       }
@@ -108,7 +122,10 @@ export default function LuckyWheel({
         }, 900)
       }, SPIN_DURATION_MS)
     } catch {
-      setError('Could not complete your spin.')
+      setStatusModal({
+        title: 'Spin could not be completed',
+        message: 'Could not complete your spin.',
+      })
       setIsSpinning(false)
       setShowOutcome(spinLocked)
     }
@@ -121,6 +138,13 @@ export default function LuckyWheel({
         title={resolvedResult?.label ?? activePrize.label}
         amount={resolvedResult?.amount ?? activePrize.amount}
         onClose={() => setShowCelebration(false)}
+      />
+      <BrandStatusModal
+        open={Boolean(statusModal)}
+        eyebrow="DEVAWINBET NOTICE"
+        title={statusModal?.title ?? ''}
+        message={statusModal?.message ?? ''}
+        onClose={() => setStatusModal(null)}
       />
 
       <SpinFrame>
@@ -177,19 +201,11 @@ export default function LuckyWheel({
               />
               <StageHint>
                 {spinLocked
-                  ? `Voucher ${voucherCode} has already been used for this result.`
+                  ? lockedVoucherMessage
                   : `Voucher ${voucherCode} is verified and ready to spin.`}
               </StageHint>
             </ActionCluster>
           </WheelZone>
-
-          <StageFooter>
-            {error ? (
-              <Typography sx={{ color: '#FCA5A5', fontSize: 14, lineHeight: 1.6 }}>
-                {error}
-              </Typography>
-            ) : null}
-          </StageFooter>
         </SpinStage>
       </SpinFrame>
 

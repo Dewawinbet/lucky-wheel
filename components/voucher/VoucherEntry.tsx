@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
-import { Alert, Snackbar } from '@mui/material'
+import BrandStatusModal from '@/components/feedback/BrandStatusModal'
 import {
   VerifyLabel,
   VerifyOverlay,
@@ -26,8 +26,7 @@ import {
 } from './VoucherEntry.styles'
 
 type VoucherStatusState =
-  | { type: 'success'; message: string }
-  | { type: 'error'; message: string }
+  | { type: 'success' | 'error'; title: string; message: string }
   | null
 
 export default function VoucherEntry() {
@@ -35,6 +34,7 @@ export default function VoucherEntry() {
   const [code, setCode] = useState('')
   const [status, setStatus] = useState<VoucherStatusState>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitPhase, setSubmitPhase] = useState<'verifying' | 'redirecting'>('verifying')
 
   const submitVoucher = async () => {
     if (isSubmitting) {
@@ -43,10 +43,12 @@ export default function VoucherEntry() {
 
     setStatus(null)
     setIsSubmitting(true)
+    setSubmitPhase('verifying')
 
     if (code.length !== 8) {
       setStatus({
         type: 'error',
+        title: 'Invalid voucher code',
         message: 'Enter a valid 8-character voucher code.',
       })
       setIsSubmitting(false)
@@ -67,22 +69,19 @@ export default function VoucherEntry() {
       if (!response.ok || !payload.valid) {
         setStatus({
           type: 'error',
+          title: 'Voucher check failed',
           message: payload.message || 'Voucher validation failed.',
         })
         setIsSubmitting(false)
         return
       }
 
-      setStatus({
-        type: 'success',
-        message: 'Voucher verified. Redirecting to the wheel…',
-      })
-
-      setIsSubmitting(false)
+      setSubmitPhase('redirecting')
       router.push('/spin')
     } catch {
       setStatus({
         type: 'error',
+        title: 'Unable to verify',
         message: 'Unable to verify voucher right now. Please try again.',
       })
       setIsSubmitting(false)
@@ -122,9 +121,13 @@ export default function VoucherEntry() {
                 </VerifySpinnerCore>
               </VerifySpinner>
               <VerifyLabel>DEVAWINBET SECURE CHECK</VerifyLabel>
-              <VerifyTitle>Verifying voucher</VerifyTitle>
+              <VerifyTitle>
+                {submitPhase === 'redirecting' ? 'Loading lucky wheel' : 'Verifying voucher'}
+              </VerifyTitle>
               <VerifyText>
-                Confirming your code and preparing a one-time spin session.
+                {submitPhase === 'redirecting'
+                  ? 'Your spin session is ready. Redirecting you to the wheel now.'
+                  : 'Confirming your code and preparing a one-time spin session.'}
               </VerifyText>
             </VerifyPanel>
           </VerifyOverlay>
@@ -185,33 +188,13 @@ export default function VoucherEntry() {
         </VoucherForm>
       </VoucherCard>
 
-      <Snackbar
+      <BrandStatusModal
         open={Boolean(status)}
-        autoHideDuration={status?.type === 'success' ? 1200 : 2800}
+        eyebrow={status?.type === 'error' ? 'DEVAWINBET NOTICE' : 'DEVAWINBET UPDATE'}
+        title={status?.title ?? ''}
+        message={status?.message ?? ''}
         onClose={() => setStatus(null)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        disableWindowBlurListener
-        key={status?.message}
-      >
-        <Alert
-          onClose={() => setStatus(null)}
-          severity={status?.type === 'success' ? 'success' : 'error'}
-          variant="filled"
-          sx={{
-            width: '100%',
-            minWidth: { xs: 'calc(100vw - 32px)', sm: 360 },
-            borderRadius: 2,
-            boxShadow: '0 18px 44px rgba(0,0,0,0.32)',
-            alignItems: 'center',
-            background:
-              status?.type === 'success'
-                ? 'linear-gradient(135deg, #0f766e, #14b8a6)'
-                : 'linear-gradient(135deg, #b91c1c, #ef4444)',
-          }}
-        >
-          {status?.message ?? ''}
-        </Alert>
-      </Snackbar>
+      />
     </VoucherShell>
   )
 }

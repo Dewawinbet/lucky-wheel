@@ -18,6 +18,7 @@ import {
 interface WheelDisplayProps {
   rotation?: number
   animateOnMount?: boolean
+  mountSpinDirection?: 'clockwise' | 'counterclockwise'
   interactive?: boolean
   variant?: 'hero' | 'stage'
   labelRotation?: number
@@ -409,6 +410,7 @@ function WheelGraphic({ labelRotation }: { labelRotation: number }) {
 export default function WheelDisplay({
   rotation = 0,
   animateOnMount = false,
+  mountSpinDirection = 'clockwise',
   interactive = false,
   variant = 'hero',
   labelRotation = 0,
@@ -443,6 +445,7 @@ export default function WheelDisplay({
       <WheelOrbit>
         <WheelDiscWrap
           $animate={animateOnMount}
+          $direction={mountSpinDirection}
           style={
             {
               '--wheel-rest-angle': `${rotation}deg`,

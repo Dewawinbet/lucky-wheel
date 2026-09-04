@@ -48,7 +48,13 @@ export default function Hero() {
       </HeroContent>
 
       <Link href="/voucher" aria-label="Go to voucher page">
-        <WheelDisplay animateOnMount rotation={HERO_REST_ANGLE} interactive variant="hero" />
+        <WheelDisplay
+          animateOnMount
+          mountSpinDirection="clockwise"
+          rotation={HERO_REST_ANGLE}
+          interactive
+          variant="hero"
+        />
       </Link>
     </HeroSection>
   )
