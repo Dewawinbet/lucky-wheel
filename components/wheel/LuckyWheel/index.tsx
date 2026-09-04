@@ -46,6 +46,7 @@ export default function LuckyWheel({
   hasSpun,
 }: LuckyWheelProps) {
   const lockedVoucherMessage = `Voucher ${voucherCode} has already been used for this result.`
+  const resultSectionRef = useRef<HTMLDivElement | null>(null)
   const initialPrize = initialResult ? getPrizeFromResult(initialResult) : PRIZES[0]
   const [activePrize, setActivePrize] = useState<Prize>(initialPrize)
   const [resolvedResult, setResolvedResult] = useState<Omit<SpinResult, 'angle'> | null>(
@@ -71,6 +72,13 @@ export default function LuckyWheel({
   const [showCelebration, setShowCelebration] = useState(false)
   const [burstActive, setBurstActive] = useState(false)
   const completedTurns = useRef(initialResult ? 1 : 0)
+
+  const focusRecordedResult = () => {
+    resultSectionRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+  }
 
   const handleSpin = async () => {
     if (isSpinning || spinLocked) {
@@ -144,7 +152,16 @@ export default function LuckyWheel({
         eyebrow="DEVAWINBET NOTICE"
         title={statusModal?.title ?? ''}
         message={statusModal?.message ?? ''}
-        onClose={() => setStatusModal(null)}
+        onClose={() => {
+          const shouldFocusResult = statusModal?.title === 'Prize already locked'
+          setStatusModal(null)
+
+          if (shouldFocusResult) {
+            window.setTimeout(() => {
+              focusRecordedResult()
+            }, 60)
+          }
+        }}
       />
 
       <SpinFrame>
@@ -209,7 +226,7 @@ export default function LuckyWheel({
         </SpinStage>
       </SpinFrame>
 
-      <ResultGrid>
+      <ResultGrid ref={resultSectionRef}>
         {showOutcome ? (
           <ResultPanelWrap>
             <PrizeResult
