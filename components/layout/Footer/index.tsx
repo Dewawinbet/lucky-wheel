@@ -1,5 +1,5 @@
 'use client'
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
+import Image from 'next/image'
 import { Typography } from '@mui/material'
 import {
   FooterRoot,
@@ -19,7 +19,7 @@ export default function Footer() {
           </Typography>
           <FooterPowered>
             <FooterPoweredMark>
-              <AutoAwesomeIcon sx={{ fontSize: 12, verticalAlign: 'middle' }} />
+              <Image src="/80x80.png" alt="DEVAWINBET" width={14} height={14} sizes="14px" />
             </FooterPoweredMark>
             <span>Powered by DEVAWINBET</span>
           </FooterPowered>

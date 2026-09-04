@@ -44,6 +44,10 @@ export const FooterPowered = styled(Box)({
 })
 
 export const FooterPoweredMark = styled('span')({
-  color: '#FBBF24',
-  fontSize: 10,
+  width: 14,
+  height: 14,
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexShrink: 0,
 })

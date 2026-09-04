@@ -20,10 +20,12 @@ export const HeaderInner = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
+  gap: 14,
 
   [theme.breakpoints.down('sm')]: {
     minHeight: 68,
     padding: '0 18px',
+    gap: 10,
   },
 }))
 
@@ -44,14 +46,11 @@ export const BrandLink = styled(Link)({
 })
 
 export const BrandMark = styled(Box)({
-  width: 38,
-  height: 38,
-  borderRadius: 12,
+  width: 34,
+  height: 34,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  background: 'linear-gradient(135deg, #8B5CF6, #EC4899)',
-  boxShadow: '0 8px 30px rgba(139,92,246,0.28)',
 })
 
 export const HeaderAction = styled(Box)(({ theme }) => ({
@@ -63,27 +62,41 @@ export const HeaderAction = styled(Box)(({ theme }) => ({
   fontWeight: 600,
 
   [theme.breakpoints.down('sm')]: {
-    display: 'none',
+    gap: 6,
+    flexShrink: 0,
   },
 }))
 
-export const PoweredBy = styled(Box)({
+export const PoweredBy = styled(Box)(({ theme }) => ({
   display: 'inline-flex',
   alignItems: 'center',
   gap: 8,
-})
 
-export const PoweredLabel = styled('span')({
+  [theme.breakpoints.down('sm')]: {
+    gap: 6,
+  },
+}))
+
+export const PoweredLabel = styled('span')(({ theme }) => ({
   color: '#717B94',
   fontSize: 11,
   fontWeight: 700,
   letterSpacing: '0.14em',
   textTransform: 'uppercase',
-})
 
-export const PoweredBrand = styled('span')({
+  [theme.breakpoints.down('sm')]: {
+    fontSize: 9,
+    letterSpacing: '0.1em',
+  },
+}))
+
+export const PoweredBrand = styled('span')(({ theme }) => ({
   color: '#F8FAFC',
   fontSize: 14,
   fontWeight: 800,
   letterSpacing: '-0.02em',
-})
+
+  [theme.breakpoints.down('sm')]: {
+    fontSize: 11,
+  },
+}))
