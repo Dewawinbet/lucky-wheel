@@ -6,9 +6,14 @@ export const HeaderRoot = styled(Box)({
   width: '100%',
   position: 'relative',
   zIndex: 10,
+  isolation: 'isolate',
+  overflow: 'hidden',
   borderBottom: '1px solid rgba(255,255,255,0.06)',
-  background: 'rgba(8,11,26,0.72)',
+  background:
+    'linear-gradient(180deg, rgba(8,11,26,0.96) 0%, rgba(8,11,26,0.94) 100%)',
   backdropFilter: 'blur(18px)',
+  WebkitBackdropFilter: 'blur(18px)',
+  boxShadow: '0 10px 28px rgba(0,0,0,0.18)',
 })
 
 export const HeaderInner = styled(Box)(({ theme }) => ({

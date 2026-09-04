@@ -140,17 +140,24 @@ export const StageFooter = styled(Box)({
 })
 
 export const ResultGrid = styled(Box)({
+  position: 'relative',
   display: 'grid',
   justifyItems: 'center',
+  isolation: 'isolate',
+  overflow: 'hidden',
 })
 
 export const ResultPanelWrap = styled(Box)(({ theme }) => ({
+  position: 'relative',
   display: 'grid',
   width: '100%',
   maxWidth: 1160,
   gridTemplateColumns: 'minmax(0, 1fr) minmax(300px, 390px)',
   gap: 18,
   alignItems: 'start',
+  padding: '8px 0 10px',
+  isolation: 'isolate',
+  overflow: 'hidden',
 
   '& > :first-of-type': {
     gridColumn: 2,
@@ -164,6 +171,7 @@ export const ResultPanelWrap = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down('lg')]: {
     gridTemplateColumns: '1fr',
     gap: 14,
+    padding: '4px 0 8px',
 
     '& > :first-of-type': {
       gridColumn: 'auto',
