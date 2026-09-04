@@ -197,6 +197,7 @@ export default function LuckyWheel({
         {showOutcome ? (
           <ResultPanelWrap>
             <PrizeResult
+              prizeId={activePrize.id}
               title={resolvedResult?.label ?? activePrize.label}
               amount={resolvedResult?.amount ?? activePrize.amount}
               spinning={isSpinning}

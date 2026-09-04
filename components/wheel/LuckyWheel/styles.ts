@@ -148,11 +148,31 @@ export const ResultPanelWrap = styled(Box)(({ theme }) => ({
   display: 'grid',
   width: '100%',
   maxWidth: 1160,
-  gridTemplateColumns: 'minmax(280px, 360px) minmax(0, 1fr)',
-  gap: 14,
+  gridTemplateColumns: 'minmax(0, 1fr) minmax(300px, 390px)',
+  gap: 18,
+  alignItems: 'start',
+
+  '& > :first-of-type': {
+    gridColumn: 2,
+  },
+
+  '& > :last-of-type': {
+    gridColumn: 1,
+    gridRow: 1,
+  },
 
   [theme.breakpoints.down('lg')]: {
     gridTemplateColumns: '1fr',
+    gap: 14,
+
+    '& > :first-of-type': {
+      gridColumn: 'auto',
+    },
+
+    '& > :last-of-type': {
+      gridColumn: 'auto',
+      gridRow: 'auto',
+    },
   },
 }))
 

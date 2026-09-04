@@ -5,7 +5,7 @@ import { Box, styled } from '@mui/material'
 export const Grid = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-  gap: 10,
+  gap: 12,
 
   [theme.breakpoints.down('sm')]: {
     gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
@@ -13,33 +13,58 @@ export const Grid = styled(Box)(({ theme }) => ({
 }))
 
 export const ItemCard = styled(Box)({
-  minHeight: 92,
-  padding: 14,
-  borderRadius: 18,
-  border: '1px solid rgba(255,255,255,0.07)',
-  background: 'linear-gradient(145deg, rgba(255,255,255,0.055), rgba(255,255,255,0.018))',
+  minHeight: 98,
+  padding: 15,
+  borderRadius: 20,
+  border: '1px solid rgba(255,255,255,0.1)',
+  background:
+    'linear-gradient(155deg, var(--prize-card-start, rgba(20,22,48,0.96)) 0%, var(--prize-card-mid, rgba(28,17,50,0.94)) 52%, var(--prize-card-end, rgba(13,18,38,0.95)) 100%)',
+  boxShadow: '0 16px 36px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06)',
   transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
+  overflow: 'hidden',
 
   '&[data-active="true"]': {
-    borderColor: 'rgba(167,139,250,0.48)',
-    boxShadow: '0 10px 28px rgba(139,92,246,0.16)',
-    transform: 'translateY(-2px)',
+    borderColor: 'rgba(255,215,90,0.38)',
+    boxShadow:
+      '0 18px 40px rgba(0,0,0,0.24), 0 0 28px var(--prize-glow, rgba(255,111,170,0.14)), inset 0 1px 0 rgba(255,255,255,0.08)',
+    transform: 'translateY(-3px)',
+  },
+
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    inset: '0 0 auto 0',
+    height: 3,
+    background: 'linear-gradient(90deg, #FFD86B 0%, #FF66A3 50%, #48E8E0 100%)',
+  },
+
+  '& > *': {
+    position: 'relative',
+    zIndex: 1,
   },
 })
 
 export const ItemIcon = styled(Box)({
-  width: 38,
-  height: 38,
-  borderRadius: 12,
+  width: 42,
+  height: 42,
+  borderRadius: 14,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   marginBottom: 10,
-  background: 'rgba(139,92,246,0.12)',
-  color: '#A78BFA',
+  background:
+    'linear-gradient(145deg, rgba(255,255,255,0.18), var(--prize-badge, rgba(139,92,246,0.14)))',
+  color: '#F6D36F',
+  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12)',
+
+  '& svg': {
+    width: 32,
+    height: 32,
+  },
 
   '&[data-active="true"]': {
-    background: 'rgba(236,72,153,0.18)',
-    color: '#F9A8D4',
+    background:
+      'linear-gradient(145deg, rgba(255,255,255,0.24), var(--prize-badge, rgba(255,102,163,0.18)))',
+    color: '#FFF0A8',
   },
 })

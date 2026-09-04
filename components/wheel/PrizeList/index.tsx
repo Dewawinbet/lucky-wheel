@@ -1,33 +1,10 @@
 'use client'
 
-import CardGiftcardOutlinedIcon from '@mui/icons-material/CardGiftcardOutlined'
-import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined'
-import RedeemOutlinedIcon from '@mui/icons-material/RedeemOutlined'
-import LocalAtmOutlinedIcon from '@mui/icons-material/LocalAtmOutlined'
-import PhoneIphoneOutlinedIcon from '@mui/icons-material/PhoneIphoneOutlined'
-import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined'
+import type { CSSProperties } from 'react'
 import { Typography } from '@mui/material'
+import { PrizeMiniIcon, prizeCardVars } from '@/components/wheel/prizeVisuals'
 import type { Prize } from '@/types/prize'
 import { Grid, ItemCard, ItemIcon } from './styles'
-
-const getPrizeIcon = (id: string) => {
-  switch (id) {
-    case 'iphone-17-pro-max':
-      return <WorkspacePremiumOutlinedIcon />
-    case 'cash-100':
-      return <PhoneIphoneOutlinedIcon />
-    case 'cash-50':
-      return <LocalAtmOutlinedIcon />
-    case 'cash-30':
-      return <RedeemOutlinedIcon />
-    case 'cash-20':
-      return <PaymentsOutlinedIcon />
-    case 'angpow':
-      return <CardGiftcardOutlinedIcon />
-    default:
-      return <RedeemOutlinedIcon />
-  }
-}
 
 interface PrizeListProps {
   prizes: Prize[]
@@ -38,13 +15,17 @@ export default function PrizeList({ prizes, activePrizeId }: PrizeListProps) {
   return (
     <Grid>
       {prizes.map((prize) => (
-        <ItemCard key={prize.id} data-active={prize.id === activePrizeId ? 'true' : 'false'}>
+        <ItemCard
+          key={prize.id}
+          data-active={prize.id === activePrizeId ? 'true' : 'false'}
+          style={prizeCardVars(prize.id) as CSSProperties}
+        >
           <ItemIcon data-active={prize.id === activePrizeId ? 'true' : 'false'}>
-            {getPrizeIcon(prize.id)}
+            <PrizeMiniIcon prizeId={prize.id} />
           </ItemIcon>
 
-          <Typography sx={{ color: '#7F8AA5', fontSize: 12, fontWeight: 700 }}>
-            {prize.label}
+          <Typography sx={{ color: 'rgba(255,255,255,0.8)', fontSize: 12, fontWeight: 800 }}>
+            {prize.shortLabel}
           </Typography>
 
           <Typography
