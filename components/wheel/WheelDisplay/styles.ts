@@ -48,7 +48,7 @@ export const FrameGlow = styled(Box)({
 export const WheelShadow = styled(Box)({
   position: 'absolute',
   left: '50%',
-  top: '77%',
+  top: '79%',
   zIndex: 1,
   width: '78%',
   height: '8%',
@@ -74,10 +74,10 @@ export const WheelOrbit = styled(Box)({
 export const BaseImageWrap = styled(Box)({
   position: 'absolute',
   left: '50%',
-  bottom: '0.5%',
+  bottom: '-9%',
   zIndex: 2,
-  width: '85%',
-  aspectRatio: '1884 / 745',
+  width: '86%',
+  aspectRatio: '1774 / 887',
   transform: 'translateX(-50%)',
   pointerEvents: 'none',
 
@@ -130,36 +130,24 @@ export const WheelSvg = styled('svg')({
   overflow: 'visible',
 })
 
-export const Pointer = styled(Box)({
+export const Pointer = styled('svg')({
   position: 'absolute',
-  top: '-0.5%',
+  top: '-1%',
   left: '50%',
   zIndex: 8,
-  width: '11.5%',
-  aspectRatio: '0.82',
+  width: '9.6%',
+  aspectRatio: '0.75',
   transform: 'translateX(-50%)',
-  clipPath: 'polygon(50% 100%, 0 0, 100% 0)',
-  background:
-    'linear-gradient(180deg, #FFEFAB 0%, #F6C44C 22%, #CF7D10 64%, #7E4304 100%)',
-  border: '4px solid rgba(129,70,7,0.95)',
-  borderRadius: '14px 14px 22px 22px',
-  boxShadow:
-    '0 12px 20px rgba(0,0,0,0.34), inset 0 2px 2px rgba(255,255,255,0.52)',
-
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    inset: '12% 18% 18%',
-    clipPath: 'polygon(50% 100%, 0 0, 100% 0)',
-    background: 'linear-gradient(180deg, #3B82F6 0%, #2454DB 54%, #132A8C 100%)',
-  },
+  overflow: 'visible',
+  filter: 'drop-shadow(0 13px 16px rgba(0,0,0,0.42))',
+  pointerEvents: 'none',
 })
 
 export const CenterHub = styled(Box)({
   position: 'absolute',
   inset: '50% auto auto 50%',
   zIndex: 5,
-  width: '19.5%',
+  width: '18.5%',
   aspectRatio: '1',
   transform: 'translate(-50%, -50%)',
   borderRadius: '50%',
@@ -173,25 +161,10 @@ export const CenterHub = styled(Box)({
   '&::before': {
     content: '""',
     position: 'absolute',
-    inset: '12%',
+    inset: '10%',
     borderRadius: '50%',
     background:
-      'radial-gradient(circle at 32% 30%, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.14) 28%, transparent 42%), linear-gradient(145deg, #F6D67F 0%, #B46A0A 44%, #7A4306 100%)',
-  },
-
-  '&::after': {
-    content: '""',
-    position: 'absolute',
-    inset: '22%',
-    borderRadius: '50%',
-    background: 'radial-gradient(circle, #101217 0%, #000000 78%)',
-    boxShadow: 'inset 0 2px 10px rgba(255,255,255,0.08)',
-  },
-
-  '& img': {
-    objectFit: 'contain',
-    padding: '23%',
-    zIndex: 1,
-    filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.3))',
+      'conic-gradient(from 12deg, #8B4B07, #F5C85D, #FFF2B8, #C77712, #6F3704, #E9B444, #8B4B07)',
+    boxShadow: 'inset 0 2px 6px rgba(255,255,255,0.34), inset 0 -8px 14px rgba(91,45,4,0.42)',
   },
 })

@@ -113,7 +113,7 @@ export const ActionCluster = styled(Box)({
   display: 'grid',
   justifyItems: 'center',
   gap: 8,
-  marginTop: -18,
+  marginTop: 5,
   pointerEvents: 'none',
 
   '& > *': {
