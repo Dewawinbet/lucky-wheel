@@ -74,10 +74,10 @@ export const WheelOrbit = styled(Box)({
 export const BaseImageWrap = styled(Box)({
   position: 'absolute',
   left: '50%',
-  bottom: '-9%',
+  bottom: '0%',
   zIndex: 2,
-  width: '86%',
-  aspectRatio: '1774 / 887',
+  width: '78%',
+  aspectRatio: '1448 / 1086',
   transform: 'translateX(-50%)',
   pointerEvents: 'none',
 
