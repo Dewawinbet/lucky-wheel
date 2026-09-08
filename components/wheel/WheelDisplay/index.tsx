@@ -392,7 +392,7 @@ export default function WheelDisplay({
       <WheelShadow />
       <BaseImageWrap>
         <Image
-          src="/noGradientBase.png"
+          src="/logoColorAdjustedBase.png"
           alt="DEVAWINBET podium"
           fill
           sizes="(max-width: 900px) 84vw, (max-width: 1400px) 48vw, 720px"
