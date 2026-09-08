@@ -6,7 +6,7 @@ import {
   FooterInner,
   FooterBrand,
   FooterPowered,
-  FooterPoweredMark,
+  FooterPoweredLogo,
 } from './styles'
 
 export default function Footer() {
@@ -18,10 +18,10 @@ export default function Footer() {
             LuckyWheel
           </Typography>
           <FooterPowered>
-            <FooterPoweredMark>
-              <Image src="/80x80.png" alt="DEVAWINBET" width={14} height={14} sizes="14px" />
-            </FooterPoweredMark>
-            <span>Powered by DEVAWINBET</span>
+            <span>Powered by</span>
+            <FooterPoweredLogo>
+              <Image src="/newLogoDeva.png" alt="DEVAWINBET" fill sizes="100px" />
+            </FooterPoweredLogo>
           </FooterPowered>
         </FooterBrand>
 

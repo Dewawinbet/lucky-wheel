@@ -41,13 +41,22 @@ export const FooterPowered = styled(Box)({
   fontSize: 12,
   fontWeight: 700,
   letterSpacing: '0.08em',
+  textTransform: 'uppercase',
 })
 
-export const FooterPoweredMark = styled('span')({
-  width: 14,
-  height: 14,
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+export const FooterPoweredLogo = styled('span')(({ theme }) => ({
+  position: 'relative',
+  width: 100,
+  height: 20,
+  display: 'inline-block',
   flexShrink: 0,
-})
+
+  [theme.breakpoints.down('sm')]: {
+    width: 88,
+    height: 18,
+  },
+
+  '& img': {
+    objectFit: 'contain',
+  },
+}))

@@ -8,9 +8,9 @@ import {
   BrandLink,
   BrandMark,
   HeaderAction,
-  PoweredBrand,
   PoweredBy,
   PoweredLabel,
+  PoweredLogo,
 } from './styles'
 
 export default function Header() {
@@ -44,19 +44,10 @@ export default function Header() {
 
         <HeaderAction>
           <PoweredBy>
-            <span
-              style={{
-                position: 'relative',
-                width: 18,
-                height: 18,
-                display: 'inline-block',
-                flexShrink: 0,
-              }}
-            >
-              <Image src="/80x80.png" alt="DEVAWINBET" fill sizes="18px" priority />
-            </span>
             <PoweredLabel>Powered by</PoweredLabel>
-            <PoweredBrand>DEVAWINBET</PoweredBrand>
+            <PoweredLogo>
+              <Image src="/newLogoDeva.png" alt="DEVAWINBET" fill sizes="120px" priority />
+            </PoweredLogo>
           </PoweredBy>
         </HeaderAction>
       </HeaderInner>

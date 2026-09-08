@@ -95,13 +95,18 @@ export const PoweredLabel = styled('span')(({ theme }) => ({
   },
 }))
 
-export const PoweredBrand = styled('span')(({ theme }) => ({
-  color: '#F8FAFC',
-  fontSize: 14,
-  fontWeight: 800,
-  letterSpacing: '-0.02em',
+export const PoweredLogo = styled(Box)(({ theme }) => ({
+  position: 'relative',
+  width: 116,
+  height: 23,
+  flexShrink: 0,
 
   [theme.breakpoints.down('sm')]: {
-    fontSize: 11,
+    width: 88,
+    height: 18,
+  },
+
+  '& img': {
+    objectFit: 'contain',
   },
 }))
